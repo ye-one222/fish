@@ -34,3 +34,11 @@ dependencies {
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+tasks.register('copyPrivate', Copy) {
+	copy {
+		from './boos-private/private'
+		include "*.yml"
+		into 'src/main/resources'
+	}
+}

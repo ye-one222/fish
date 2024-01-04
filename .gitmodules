@@ -1,0 +1,3 @@
+[submodule "back-end/private-info"]
+	path = back-end/private-info
+	url = https://github.com/ja7811/fish-private.git

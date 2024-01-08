@@ -37,6 +37,12 @@ public class UserController {
         }
     }
 
+    @DeleteMapping("/{id}")
+    public String deleteUser(@PathVariable(name="id") String id){
+        // 해당 회원 삭제
+        return "yes";
+    }
+
     @PostMapping("/signup")
     public String signup(){
         // 받은 정보로 회원가입
@@ -48,7 +54,8 @@ public class UserController {
         // 해당 유저의 그물들 반환
         Optional<MemberDTO> member = memberService.searchById(id);
         if(member.isEmpty()) return "no";
-        List<GmoolDTO> gmools = gmoolService.searchByUserId(member.id);
+        MemberDTO memberDTO = member.get();
+        List<GmoolDTO> gmools = gmoolService.searchByUserId(memberDTO.getId());
         return "gmool of " + id;
     }
 }

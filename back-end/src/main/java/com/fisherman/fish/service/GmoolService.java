@@ -17,7 +17,7 @@ public class GmoolService {
     public Optional<GmoolDTO> searchById(Long gid) {
     }
 
-    public Optional<GmoolDTO> searchByUserId(Long uid){
+    public Optional<GmoolDTO> searchByUserId(String uid){
 
     }
 }

@@ -11,7 +11,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class GmoolService {
 
-    public List<GmoolDTO> getAllGmools() {
+    public static int generatePinNumber() {
     }
 
     public Optional<GmoolDTO> searchById(Long gid) {
@@ -19,5 +19,11 @@ public class GmoolService {
 
     public Optional<GmoolDTO> searchByUserId(String uid){
 
+    }
+
+    public void save(GmoolDTO gmoolDTO) {
+    }
+
+    public List<GmoolDTO> searchAll() {
     }
 }

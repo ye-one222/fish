@@ -5,7 +5,6 @@ import com.fisherman.fish.dto.GmoolDTO;
 import com.fisherman.fish.service.GmoolService;
 import com.fisherman.fish.service.MemberService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,8 +20,8 @@ public class GmoolController {
     @GetMapping("/")
     public List<GmoolDTO> getGmools(){
         // 모든 그물 반환
-        List<GmoolDTO> gmools = gmoolService.searchAll();
-        // TODO: 비어있다면 예외처리
+        List<GmoolDTO> gmools = gmoolService.findAll();
+        // TODO: 검색 결과 비어있다면 예외처리?
 
         return gmools;
     }
@@ -46,8 +45,8 @@ public class GmoolController {
     @GetMapping("/{gid}")
     public String getGmool(@PathVariable(name="gid") Long gid){
         // 해당 그물 반환
-        Optional<GmoolDTO> gmool = gmoolService.searchById(gid);
-        if(gmool.isPresent()){
+        GmoolDTO gmool = gmoolService.findById(gid);
+        if(gmool == null){
             return "yes";
         }
         else{

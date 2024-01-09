@@ -1,5 +1,6 @@
 package com.fisherman.fish.dto;
 
+import com.fisherman.fish.entity.GmoolEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,4 +18,10 @@ public class GmoolDTO {
     private int dueMinute; // 유효기간 (분)
     private int pinNumber; // 그물 핀번호
     private int fileCount; // 첨부 파일 수
+    // TODO: QR코드 이미지 저장?
+
+    public static GmoolDTO toGmoolDTO(GmoolEntity gmoolEntity) {
+
+    }
+
 }

@@ -55,7 +55,7 @@ public class UserController {
         Optional<MemberDTO> member = memberService.searchById(id);
         if(member.isEmpty()) return "no";
         MemberDTO memberDTO = member.get();
-        List<GmoolDTO> gmools = gmoolService.searchByUserId(memberDTO.getId());
+        List<GmoolDTO> gmools = gmoolService.findByUserId(memberDTO.getId());
         return "gmool of " + id;
     }
 }

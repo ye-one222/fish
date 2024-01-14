@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -27,14 +26,9 @@ public class UserController {
     @GetMapping("/{id}")
     public String getUserById(@PathVariable(name="id") String id){
         // 해당 user의 정보 반환
-        Optional<MemberDTO> member = memberService.searchById(id);
-        if(member.isPresent()){
-            // member 존재하는 경우
-            return "yes";
-        } else {
-            // member 존재하지 않는 경우
-            return "no";
-        }
+        MemberDTO member = memberService.searchById(id);
+        if(member == null) return "no";
+        return "yes";
     }
 
     @DeleteMapping("/{id}")
@@ -52,9 +46,8 @@ public class UserController {
     @GetMapping("/{id}/gmools")
     public String getUserGmool(@PathVariable(name="id") String id){
         // 해당 유저의 그물들 반환
-        Optional<MemberDTO> member = memberService.searchById(id);
-        if(member.isEmpty()) return "no";
-        MemberDTO memberDTO = member.get();
+        MemberDTO memberDTO = memberService.searchById(id);
+        if(memberDTO == null) return "no";
         List<GmoolDTO> gmools = gmoolService.findByUserId(memberDTO.getId());
         return "gmool of " + id;
     }

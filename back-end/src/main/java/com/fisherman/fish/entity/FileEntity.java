@@ -1,13 +1,12 @@
 package com.fisherman.fish.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
-
 @Entity
 @Getter
-@Setter
 @Table(name = "file")
+@AllArgsConstructor
 public class FileEntity {
     @Id
     private String storedFileName;
@@ -18,7 +17,7 @@ public class FileEntity {
     @Column
     private long fileSize;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="") //TODO
+    @ManyToOne
+    @JoinColumn(name = "gmool_id")
     private GmoolEntity gmoolEntity;
 }

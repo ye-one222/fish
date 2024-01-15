@@ -1,12 +1,9 @@
 package com.fisherman.fish.entity;
 
-import com.fisherman.fish.dto.FileDTO;
 import com.fisherman.fish.dto.GmoolDTO;
-import com.fisherman.fish.dto.MemberDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -48,6 +45,10 @@ public class GmoolEntity {
     @ManyToOne
     @JoinColumn(name="member_id")
     private MemberEntity gmoolOwner;
+
+    public void updatePinNumber(int pinNumber){
+        this.pinNumber = pinNumber;
+    }
 
     public void addFileEntity(FileEntity fileEntity){
         fileEntityList.add(fileEntity);

@@ -23,6 +23,7 @@ public class GmoolDTO {
     
     private List<FileDTO> fileDTOList; // 첨부 파일
     private int fileCount; // 첨부 파일 수
+    private String userId; // 게시자 id
     // TODO: QR코드 이미지 저장?
 
     public static GmoolDTO toGmoolDTO(GmoolEntity gmoolEntity) {

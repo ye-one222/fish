@@ -1,5 +1,6 @@
 package com.fisherman.fish.entity;
 
+import com.fisherman.fish.dto.FileDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,4 +21,25 @@ public class FileEntity {
     @ManyToOne
     @JoinColumn(name = "gmool_id")
     private GmoolEntity gmoolEntity;
+
+    public void setGmoolEntity(GmoolEntity gmoolEntity){
+        this.gmoolEntity = gmoolEntity;
+    }
+
+    public static FileEntity toFileEntity(FileDTO fileDTO){
+        return new FileEntity(
+                fileDTO.getStoredFileName(),
+                fileDTO.getOriginalFileName(),
+                fileDTO.getFileSize(),
+                null);
+    }
+
+    public static FileEntity toFileEntity(FileDTO fileDTO, GmoolEntity gmoolEntity){
+        // TODO: gmoolEntity 처리
+        return new FileEntity(
+                fileDTO.getStoredFileName(),
+                fileDTO.getOriginalFileName(),
+                fileDTO.getFileSize(),
+                gmoolEntity);
+    }
 }

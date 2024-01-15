@@ -23,6 +23,12 @@ public class UserController {
         return members;
     }
 
+    @PostMapping("/")
+    public String signup(){
+        // 받은 정보로 회원가입
+        return "ok";
+    }
+
     @GetMapping("/{id}")
     public String getUserById(@PathVariable(name="id") String id){
         // 해당 user의 정보 반환
@@ -37,11 +43,7 @@ public class UserController {
         return "yes";
     }
 
-    @PostMapping("/signup")
-    public String signup(){
-        // 받은 정보로 회원가입
-        return "ok";
-    }
+
 
     @GetMapping("/{id}/gmools")
     public String getUserGmool(@PathVariable(name="id") String id){

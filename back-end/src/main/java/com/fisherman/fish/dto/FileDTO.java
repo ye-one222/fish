@@ -9,10 +9,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @Setter
+@AllArgsConstructor
 @NoArgsConstructor
 public class FileDTO {
     private String originalFileName; // 원래 파일명
-    private String storedFileName; // 서버에 저장되는 파일명 -> PK
+    private String storedFileName; // 서버 저장용 파일명 -> PK
     private MultipartFile file; // 파일
     
     //private long gmoolId; // 연결된 그물의 id -> 필요한가??

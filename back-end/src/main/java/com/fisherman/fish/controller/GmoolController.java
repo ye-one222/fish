@@ -1,6 +1,7 @@
 package com.fisherman.fish.controller;
 
 import com.fisherman.fish.dto.GmoolDTO;
+import com.fisherman.fish.dto.GmoolReceiveDTO;
 import com.fisherman.fish.service.GmoolService;
 import com.fisherman.fish.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -23,12 +24,29 @@ public class GmoolController {
     }
     
     @PostMapping("/")
-    public GmoolDTO createGmool(@ModelAttribute("gmool") GmoolDTO gmoolDTO){
+    public GmoolDTO createGmool(@ModelAttribute("gmool") GmoolReceiveDTO gmoolReceiveDTO){
+        System.out.println("GmoolController: [POST at '/gmool'] "); // test
         // 예외처리 : DTO 없이 POST 요청 보낸 경우
-        if(gmoolDTO == null){
+        if(gmoolReceiveDTO == null){
+            System.out.println("- EXCEPTION: gmoolDTO is null"); // test
             return null;
         }
+        // 예외처리 : 파일이 비어있는 경우
+        if(gmoolReceiveDTO.getFiles() == null){
+            System.out.println("- EXCEPTION: no files are included"); // test
+            return null;
+        }
+        // 예외처리 : 유효기간이 설정되어있지 않은 경우, 기본값(10분)으로 설정 TODO: 미설정시 기본값 0 맞는지 테스트 필요
+        if(gmoolReceiveDTO.getDueMinute() == 0){
+            int defaultTime = 10;
+            System.out.println("- WARNING: due minute is not set; it would be set to default (" + defaultTime + ")");
+            gmoolReceiveDTO.setDueMinute(defaultTime);
+        }
+        // TODO : 그물 생성시각 할당
+        // TODO : 파일 개수 할당
+        GmoolDTO gmoolDTO = new GmoolDTO(gmoolReceiveDTO); // 첨부파일을 fileDTO로 만듬
         GmoolDTO savedDTO = gmoolService.save(gmoolDTO);
+        System.out.println("GmoolController: saved gmool.");
         return savedDTO;
     }
 

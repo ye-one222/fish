@@ -87,9 +87,11 @@ public class GmoolService {
         //  전부 묶어서 반환
         // 해당 그물 저장
 
+        System.out.println("GmoolService: [save() called]"); // test
         // 1. pin 번호 생성
         int pinNumber = GmoolService.generatePinNumber();
         gmoolDTO.setPinNumber(pinNumber);
+        System.out.println("- pinNumber " + pinNumber + " created."); // test
 
         // 2. 링크 생성 -> 생략 (url에 pin넘버만 붙이면 됨)
 
@@ -101,7 +103,7 @@ public class GmoolService {
         List<FileDTO> fileDTOs = gmoolDTO.getFileDTOList();
         for(FileDTO fd : fileDTOs) {
             String fileName = gmoolCount + fd.getOriginalFileName();
-            System.out.println("GmoolService: File '" + fd.getOriginalFileName() + "'will be saved as '" + fileName + "'");
+            System.out.println("- File '" + fd.getOriginalFileName() + "'will be saved as '" + fileName + "'"); // test
             fd.setStoredFileName(fileName);
         }
         // 파일을 서버에 저장한다.
@@ -114,7 +116,7 @@ public class GmoolService {
                 file.transferTo(new File(savePath));
             }
         } catch(Exception e){
-            System.out.println("GmoolService : Exception occurred while saving '" + fileName + "'");
+            System.out.println("- EXCEPTION: Exception occurred while saving '" + fileName + "'"); // test
             e.printStackTrace();
         }
         
@@ -126,7 +128,7 @@ public class GmoolService {
             Optional<MemberEntity> optionalMemberEntity = memberRepository.findById(gmoolDTO.getUserId());
             if(optionalMemberEntity.isEmpty()) {
                 // 멤버가 존재하지 않는 경우
-                System.out.println("GmoolService: member '" + gmoolDTO.getUserId() + "' doesn't exist.");
+                System.out.println("- EXCEPTION: member '" + gmoolDTO.getUserId() + "' doesn't exist."); // test
                 return null;
             }
         }

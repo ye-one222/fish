@@ -5,12 +5,16 @@ import com.fisherman.fish.dto.MemberDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Getter
+@NoArgsConstructor // 임시 (No default constructor for entity 'GmoolEntity')
+@Setter // 임시
 @AllArgsConstructor
 @Table(name = "member")
 public class MemberEntity {

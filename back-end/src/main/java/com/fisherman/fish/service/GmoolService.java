@@ -2,7 +2,6 @@ package com.fisherman.fish.service;
 
 import com.fisherman.fish.dto.FileDTO;
 import com.fisherman.fish.dto.GmoolDTO;
-import com.fisherman.fish.dto.MemberDTO;
 import com.fisherman.fish.entity.FileEntity;
 import com.fisherman.fish.entity.GmoolEntity;
 import com.fisherman.fish.entity.MemberEntity;
@@ -15,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -39,10 +37,13 @@ public class GmoolService {
         return pinNumber++;
     }
 
+    @Transactional
     public GmoolDTO findById(Long gid) {
         // id에 해당하는 그물 반환
         Optional<GmoolEntity> optionalGmoolEntity = gmoolRepository.findById(gid);
         if(optionalGmoolEntity.isEmpty()) return null; // 그물이 존재하지 않는 경우 null 반환
+        // Member 엔티티도 같이 검색 (아직 Proxy 객체로 채워져있음)
+        //GmoolEntity gmoolEntity = optionalGmoolEntity.get();
         // DTO로 변환하여 반환
         return GmoolDTO.toGmoolDTO(optionalGmoolEntity.get());
     }
@@ -149,13 +150,18 @@ public class GmoolService {
             fe.setGmoolEntity(gmoolEntity);
             gmoolEntity.addFileEntity(fe);
         }
-        // - 그물 Entity를 저장하고, dto를 반환한다
+        // - 그물 Entity와 각 파일 Entity를 저장한다.
         gmoolCount++; // test
         GmoolEntity savedEntity = gmoolRepository.save(gmoolEntity);
+        for(FileEntity fe : gmoolEntity.getFileEntityList()){
+            fileRepository.save(fe);
+        }
         System.out.println("GmoolService: gmool saved. (id: " + savedEntity.getId() + ", pinNumber: " + savedEntity.getPinNumber());
-        return GmoolDTO.toGmoolDTO(savedEntity);  // 생성된 Id 반환
+        // 저장된 그물 dto를 반환한다.
+        return GmoolDTO.toGmoolDTO(savedEntity);
     }
 
+    @Transactional
     public List<GmoolDTO> findAll() {
         // 모든 그물 return
         List<GmoolEntity> gmoolEntities = gmoolRepository.findAll();

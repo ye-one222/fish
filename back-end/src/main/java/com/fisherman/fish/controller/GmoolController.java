@@ -1,5 +1,6 @@
 package com.fisherman.fish.controller;
 
+import com.fisherman.fish.dto.FileDTO;
 import com.fisherman.fish.dto.GmoolDTO;
 import com.fisherman.fish.dto.GmoolReceiveDTO;
 import com.fisherman.fish.service.GmoolService;
@@ -17,8 +18,9 @@ public class GmoolController {
     private final MemberService memberService;
 
     @GetMapping("/")
-    public List<GmoolDTO> getGmools(){
+    public Object getGmools(){
         // 모든 그물 반환
+        // TODO: 그물dto 반환 시 password는 주면 안된다!
         List<GmoolDTO> gmools = gmoolService.findAll();
         return gmools;
     }
@@ -59,15 +61,30 @@ public class GmoolController {
     }
 
     @GetMapping("/{gid}/files")
-    public String getFiles(@PathVariable(name="gid") Long gid){
+    public Object getFiles(@PathVariable(name="gid") Long gid){
         // 해당 그물의 파일 모두 반환
-        return "ok";
+        // 그물 검색
+        GmoolDTO gmoolDTO = gmoolService.findById(gid);
+        if(gmoolDTO == null) return "gmool is not found!";
+        // 파일 반환
+        List<FileDTO> files = gmoolDTO.getFileDTOList();
+        if(files == null) return "no files for you!";
+        return files;
     }
 
     @GetMapping("/{gid}/files/{filename}")
-    public String getFile(@PathVariable(name="gid") Long gid, @PathVariable(name="filename") String fname){
+    public Object getFile(@PathVariable(name="gid") Long gid, @PathVariable(name="filename") String filename){
         // 해당 그물의 해당 파일 반환
-        return gid + fname;
+        // 그물 검색
+        GmoolDTO gmoolDTO = gmoolService.findById(gid);
+        if(gmoolDTO == null) return "gmool is not found!";
+        // 파일 반환
+        List<FileDTO> files = gmoolDTO.getFileDTOList();
+        if(files == null) return "no files for you!";
+        for(FileDTO f : files){
+            if(f.getOriginalFileName().equals(filename)) return f;
+        }
+        return "gmool exists but not " + filename + "!";
     }
 
 

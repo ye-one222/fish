@@ -22,6 +22,7 @@ public class GmoolDTO {
     private String gmoolName; // 그물명
     private String password; // 그물 암호
     private LocalDateTime createdTime; // 생성시각
+    private LocalDateTime updatedTime; // 수정시각
     private int dueMinute; // 유효기간 (분)
     private int pinNumber; // 그물 핀번호
     
@@ -30,6 +31,7 @@ public class GmoolDTO {
     private String userId; // 게시자 id
 
     public GmoolDTO(GmoolReceiveDTO g){
+        // GmoolReceiver로부터 dto 생성
         id = g.getId();
         gmoolName = g.getGmoolName();
         password = g.getPassword();

@@ -4,8 +4,13 @@ import com.fisherman.fish.dto.FileDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 @Entity
 @Getter
+@Setter // 임시
+@NoArgsConstructor // 임시
 @Table(name = "file")
 @AllArgsConstructor
 public class FileEntity {

@@ -4,6 +4,10 @@ import com.fisherman.fish.dto.GmoolDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -11,6 +15,8 @@ import java.util.List;
 
 @Entity
 @Getter
+@Setter // 임시
+@NoArgsConstructor // 임시
 @AllArgsConstructor
 @Table(name = "gmool")
 public class GmoolEntity {
@@ -24,8 +30,13 @@ public class GmoolEntity {
     @Column
     private String password;
 
-    @Column
+    @CreationTimestamp
+    @Column(updatable = false)
     private LocalDateTime createdTime;
+
+    @UpdateTimestamp
+    @Column(insertable = false)
+    private LocalDateTime updatedTime;
 
     @Column
     private int dueMinute;
@@ -66,6 +77,7 @@ public class GmoolEntity {
                 gmoolDTO.getGmoolName(),
                 gmoolDTO.getPassword(),
                 gmoolDTO.getCreatedTime(),
+                gmoolDTO.getUpdatedTime(),
                 gmoolDTO.getDueMinute(),
                 gmoolDTO.getPinNumber(),
                 new ArrayList<>(),

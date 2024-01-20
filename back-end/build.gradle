@@ -37,10 +37,12 @@ tasks.named('test') {
 	useJUnitPlatform()
 }
 
-task copyPrivate(type: Copy) {
+tasks.register('copyPrivate', Copy) {
+	// private-info 폴더의 application.yml을 src/main/resources/로 옮김 (resources에 있어야 빌드 시 포함됨)
+	description = "Copy yml files to resources directory"
 	copy {
-		from './private-info/'
+		from 'private-info/'
 		include "*.yml"
-		into 'src/main/resources'
+		into 'src/main/resources/'
 	}
 }

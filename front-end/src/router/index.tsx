@@ -1,10 +1,10 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import React from "react";
-import {MainPage} from "../app/page"
+import { MainPage } from "../app/main"
 //import { RouterProvider } from "react-router-dom";
 
-export type FishRouterPath = '/' | `/detail/${string}` | '/emotions' | `/emotions/${string}`
-const fishRouter = createBrowserRouter([
+export type DiaryRouterPath = '/' | `/detail/${string}` | '/emotions' | `/emotions/${string}`
+const diaryRouter = createBrowserRouter([
     {
         path: '/',
         element: <MainPage />,
@@ -12,6 +12,5 @@ const fishRouter = createBrowserRouter([
 ])
 
 // eslint-disable-next-line react/jsx-no-undef
-export const FishRouter = () => <RouterProvider router={fishRouter} />
-
+export const DiaryRouter = () => <RouterProvider router={diaryRouter} />
 

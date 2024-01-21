@@ -1,4 +1,10 @@
-.App {
+.MainCSS {
+  background: #E8FAFD;
+  min-height: 100vh;
+  display: flex;  
+  flex-direction: column;
+}
+/*.App {
   text-align: center;
 }
 
@@ -36,3 +42,4 @@
     transform: rotate(360deg);
   }
 }
+*/

@@ -1,11 +1,10 @@
-import logo from './logo.svg';
 import './App.css';
 import React from 'react';
 import { MainPage } from './app/main.tsx';
 
 function App() {
   return (
-    <div className="App">
+    <div className="MainCSS">
         <MainPage/>
     </div>
   );

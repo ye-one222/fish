@@ -3,6 +3,7 @@
   min-height: 100vh;
   display: flex;  
   flex-direction: column;
+  color: #27416D;
 }
 /*.App {
   text-align: center;

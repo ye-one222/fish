@@ -14,4 +14,3 @@ const diaryRouter = createBrowserRouter([
 // eslint-disable-next-line react/jsx-no-undef
 export const DiaryRouter = () => <RouterProvider router={diaryRouter} />
 
-

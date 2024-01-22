@@ -15,14 +15,14 @@ import java.util.Optional;
 public class MemberService {
     private final MemberRepository memberRepository;
     public List<MemberDTO> getAllMembers() {
-        // TODO
+        // TODO : Member서비스 완성
         // 모든 회원 dto 반환
         List<MemberDTO> memberDTOList = new ArrayList<>();
         return memberDTOList;
     }
 
     public MemberDTO searchById(String id) {
-        // TODO
+        // TODO : Member서비스 완성
         // id로 회원 검색
         Optional<MemberEntity> optionalMemberEntity = memberRepository.findById(id);
         if (optionalMemberEntity.isEmpty()) return null;

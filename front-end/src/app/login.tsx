@@ -31,7 +31,6 @@ export const LoginPage:React.FC=()=>{
                         Log In
                     </button>
                 </form>
-
                 <div className="absolute w-[309px] h-[40px] top-[700px] left-[601px] [font-family:'Inter-Regular',Helvetica] font-normal text-[#27416d] text-[20px] text-center tracking-[0] leading-[normal]">
                     회원가입
                 </div>

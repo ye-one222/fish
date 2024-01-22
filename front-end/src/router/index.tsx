@@ -1,7 +1,7 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import React from "react";
 import { MainPage } from "../app/main"
-import { UploadPage } from "../app/upload"
+import { UploadPage } from "../app/upload/upload"
 //import { RouterProvider } from "react-router-dom";
 
 export type DiaryRouterPath = '/' | `/detail/${string}` | '/upload' | `/emotions/${string}`

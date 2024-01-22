@@ -1,5 +1,5 @@
 import React from 'react'
-import '../tailwind.css';
+import '../../tailwind.css';
 
 export const UploadPage:React.FC=()=>{
     return (
@@ -65,7 +65,7 @@ export const UploadPage:React.FC=()=>{
                     암호 설정
                 </div>
                 <div className="w-[601px] h-[60px] top-[69px] left-0 bg-[#e8fafd] absolute rounded-[50px]" />
-                <div className="w-[602px] h-[40px] top-[79px] left-[34px] [-webkit-text-stroke:1px_transparent] font-medium text-[#0000005e] text-[30px] absolute [font-family:'Inter',Helvetica] tracking-[0] leading-[normal]">
+                <div className="w-[602px] h-[40px] top-[79px] left-[34px] font-medium text-[#0000005e] text-[30px] absolute [font-family:'Inter',Helvetica] tracking-[0] leading-[normal]">
                     ●●●●●
                 </div>
             </div>

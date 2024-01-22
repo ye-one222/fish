@@ -10,7 +10,7 @@ import './tailwind.css';
 function App() {
   return (
     <div className="App">
-        <AfterUploadPage/>
+        <MainPage/>
     </div>
   );
 }

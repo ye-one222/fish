@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import '../tailwind.css';
-import {  BrowserRouter, Link,  } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+//import { Link } from 'react-router-dom';
+//import {  BrowserRouter, Link,  } from 'react-router-dom';
 //import { useNavigate } from "react-router-dom";
 
 const EachFileShow:React.FC = (props) => {
@@ -53,18 +55,18 @@ const FileUploadInput:React.FC=()=>{
 }
 
 const DownButton:React.FC= () => {
-    return <BrowserRouter>
+    return (<div>
         <Link to={'/download'}>
             <button 
             className='text-[50px] font-semibold flex w-full  h-[107px] justify-center items-center 
             bg-white rounded-[50px] border border-white hover:border-[#27416D] transition-all p-3'>
                 FISH 받기</button>
         </Link>
-    </BrowserRouter>
+    </div>)
 }
 
 export const MainPage:React.FC=()=>{
-    const [userID,] = useState('null')
+    const [userID,] = useState(null)
 
     /*
     const navi = useNavigate();

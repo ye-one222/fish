@@ -1,7 +1,7 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import React from "react";
-import { MainPage } from "../app/main"
-import { DownLoadPage } from '../app/download';
+import { MainPage } from "../app/main.tsx"
+import { DownLoadPage } from '../app/download.tsx';
 //import { RouterProvider } from "react-router-dom";
 
 export type FishRouterPath = '/' | '/download' 

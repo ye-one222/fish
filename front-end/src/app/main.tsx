@@ -37,7 +37,7 @@ const FileUploadInput:React.FC=()=>{
         event?.preventDefault();
     }
 
-    return <div className='flex flex-col justify-center bg-white w-1/3 max-w-[521px] h-[557px] rounded-[50px]'>
+    return <div className='flex flex-col justify-center bg-white w-1/3 max-w-[521px] rounded-[50px]'>
         <h1 className='text-[50px] font-semibold flex justify-center mt-4 '>FISH 보내기</h1>
         <label 
         onDragStart={handleDragStart} 
@@ -66,15 +66,13 @@ const DownButton:React.FC= () => {
 }
 
 export const MainPage:React.FC=()=>{
-    const [userID,] = useState(null)
+    const [userID,setUserID] = useState<string|null>('')
 
-    /*
-    const navi = useNavigate();
-    function handleBtnClick(): void {
-        navi('/download');
-    }*/
+    function handleLogOutBtn() {
+        setUserID(null);
+    }
 
-    return <main className='bg-[#E8FAFD] flex flex-col items-center justify-center'>
+    return (<div className='MainPageCSS'>
         <div className='flex flex-row items-end '>
             <h1 className='text-[75px] font-bold'>FISH</h1>
             <div className='flex flex-row m-4 font-sans text-[30px] font-medium'>
@@ -86,18 +84,21 @@ export const MainPage:React.FC=()=>{
         <div className='font-semibold flex flex-row items-center justify-between w-full'>
         <h1 className='flex text-[80px] '>🐠</h1>
             {userID ? 
-                <button  className='flex absolute left-3/4 text-[30px] rounded-3xl bg-white pl-3 pr-3 
+                <button onClick={handleLogOutBtn} className='flex absolute left-3/4 text-[30px] rounded-3xl bg-white pl-3 pr-3 
                     border border-white hover:border-[#27416D] transition-all'>
                         LOG OUT</button>:
                     <div className=' grid-flow-row text-[30px] absolute left-3/4'>
-                        <button className='rounded-3xl bg-white mb-2 mr-2 pl-3 pr-3 
-                            border border-white hover:border-[#27416D] transition-all'>LOG IN</button>
-                        <button className='rounded-3xl pl-3 pr-3 border border-[#E8FAFD] hover:border-[#27416D] transition-all'>
-                            SIGN UP</button>
+                        <Link to={'/login'}>
+                            <button className='rounded-3xl bg-white mb-2 mr-2 pl-3 pr-3 
+                                border border-white hover:border-[#27416D] transition-all'>
+                                    LOG IN</button></Link>
+                        <Link to={'/signup'}>
+                            <button className='rounded-3xl pl-3 pr-3 border border-[#E8FAFD] hover:border-[#27416D] transition-all'>
+                            SIGN UP</button></Link>
                     </div>
             }
         </div>
-        <div className='flex flex-row gap-4  w-full justify-center'>
+        <div className='flex flex-row gap-4 w-full justify-center'>
             <FileUploadInput/>
             <div className='flex flex-col w-1/3 max-w-[430px]'>
                 <DownButton/>
@@ -111,7 +112,7 @@ export const MainPage:React.FC=()=>{
                 
             </div>
         </div>
-        <h1 className='text-[200px] absolute bottom-0 right-2/3'>🪸</h1>
-        <h1 className='text-[150px] absolute bottom-0 left-3/4'>🪸</h1>
-    </main>
+        <h1 className='text-[150px] absolute bottom-0 right-3/4'>🪸</h1>
+        <h1 className='text-[100px] absolute bottom-0 left-3/4'>🪸</h1>
+    </div>)
 }

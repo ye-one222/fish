@@ -1,9 +1,18 @@
 .MainCSS {
-  background: #E8FAFD;
   min-height: 100vh;
   display: flex;  
   flex-direction: column;
   color: #27416D;
+  height: 100vh;
+  font-family:'Inter',Helvetica;
+}
+.MainPageCSS{
+  background-color: #E8FAFD;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
 }
 /*.App {
   text-align: center;

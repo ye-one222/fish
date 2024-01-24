@@ -33,8 +33,8 @@ export const LoginPage:React.FC=()=>{
                         Log In
                     </button>
                 </form>
-                <Link to="/signup">
-                    <div className="mt-8 [font-family:'Inter-Regular',Helvetica] font-normal text-[#27416d] text-[18px] text-center tracking-[0] leading-[normal]">
+                <Link to="/signup" className="mt-8">
+                    <div className="[font-family:'Inter-Regular',Helvetica] font-normal text-[#27416d] text-[18px] text-center tracking-[0] leading-[normal]">
                         회원가입
                     </div>
                 </Link>

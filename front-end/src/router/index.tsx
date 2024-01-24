@@ -3,6 +3,8 @@ import React from "react";
 import { MainPage } from "../app/main.tsx"
 import { DownLoadPage } from '../app/download.tsx';
 import { LoginPage } from '../app/login.tsx';
+import { SignupPage } from '../app/signup.tsx';
+import { UploadPage } from '../app/upload/upload.tsx';
 //import "/node_modules/react-grid-layout/css/styles.css";
 //import "/node_modules/react-resizable/css/styles.css";
 //import { RouterProvider } from "react-router-dom";
@@ -20,6 +22,14 @@ const fishRouter = createBrowserRouter([
     {
         path:'/login',
         element: <LoginPage />,
+    },
+    {
+        path:'/signup',
+        element: <SignupPage />,
+    },
+    {
+        path:'/upload',
+        element: <UploadPage />,
     },
 ])
 

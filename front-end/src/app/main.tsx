@@ -1,6 +1,9 @@
 import React, { useState } from 'react'
 import '../tailwind.css';
-import {  BrowserRouter, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+//import { Link } from 'react-router-dom';
+//import {  BrowserRouter, Link,  } from 'react-router-dom';
+//import { useNavigate } from "react-router-dom";
 
 const EachFileShow:React.FC = (props) => {
 
@@ -17,7 +20,7 @@ const MyFishCom:React.FC = () => {
     
     return <div className='h-full bg-white rounded-[50px] mt-10'>
         <h1 className='text-[40px] font-semibold p-4 flex justify-center'>나의 FISH</h1>
-        <div className=' grid-rows-2'>
+        <div className=''>
             {myFile.map((each)=>(EachFileShow(each)))}
             <button>{}</button>
         </div>
@@ -52,18 +55,19 @@ const FileUploadInput:React.FC=()=>{
 }
 
 const DownButton:React.FC= () => {
-    return <BrowserRouter>
+    return (<div>
         <Link to={'/download'}>
             <button 
             className='text-[50px] font-semibold flex w-full  h-[107px] justify-center items-center 
             bg-white rounded-[50px] border border-white hover:border-[#27416D] transition-all p-3'>
                 FISH 받기</button>
         </Link>
-    </BrowserRouter>
+    </div>)
 }
 
 export const MainPage:React.FC=()=>{
-    const [userID,] = useState('null')
+    const [userID,] = useState(null)
+
     /*
     const navi = useNavigate();
     function handleBtnClick(): void {
@@ -82,7 +86,7 @@ export const MainPage:React.FC=()=>{
         <div className='font-semibold flex flex-row items-center justify-between w-full'>
         <h1 className='flex text-[80px] '>🐠</h1>
             {userID ? 
-                <button className='flex absolute left-3/4 text-[30px] rounded-3xl bg-white pl-3 pr-3 
+                <button  className='flex absolute left-3/4 text-[30px] rounded-3xl bg-white pl-3 pr-3 
                     border border-white hover:border-[#27416D] transition-all'>
                         LOG OUT</button>:
                     <div className=' grid-flow-row text-[30px] absolute left-3/4'>

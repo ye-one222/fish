@@ -5,13 +5,14 @@ import { DownLoadPage } from '../app/download.tsx';
 import { LoginPage } from '../app/login.tsx';
 //import "/node_modules/react-grid-layout/css/styles.css";
 //import "/node_modules/react-resizable/css/styles.css";
+//import { RouterProvider } from "react-router-dom";
 
 export type FishRouterPath = '/' | '/download' 
 const fishRouter = createBrowserRouter([
-    /*{
+    {
         path: '/',
         element: <MainPage />,
-    },*/
+    },
     {
         path:'/download',
         element: <DownLoadPage />,

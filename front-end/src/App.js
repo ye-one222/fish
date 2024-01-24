@@ -3,6 +3,7 @@ import './App.css';
 
 import React from 'react';
 import { MainPage } from './app/main.tsx';
+//import FishRouter from './router/index.tsx'
 import './tailwind.css';
 
 function App() {

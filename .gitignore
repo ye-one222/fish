@@ -65,7 +65,7 @@ replay_pid*
 back-end/src/main/resources/*.yml
 
 # DB savefile
-dbtest.save
+dbtest.save*
 
 
 # React

@@ -13,7 +13,7 @@ public class MemberDTO {
     private String LastName; // 성
 
     public static MemberDTO toMemberDTO(MemberEntity memberEntity) {
-        // TODO
+        // TODO: toMemberDTO 완성
         return new MemberDTO("id", "pw", "Jane", "Doe");
     }
 }

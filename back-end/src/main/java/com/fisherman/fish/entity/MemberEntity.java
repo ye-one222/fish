@@ -41,7 +41,7 @@ public class MemberEntity {
     }
 
     public static MemberEntity toMemberEntity(MemberDTO memberDTO){
-        // TODO
+        // TODO: toMemberEntity 완성
 
         return new MemberEntity(
                 memberDTO.getId(),

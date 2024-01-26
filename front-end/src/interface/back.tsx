@@ -4,22 +4,6 @@ import { Link } from 'react-router-dom'
 {/* 좌측 상단 - 돌아가기 (나중에 컴포넌트 새로 하나 만들어서 재활용 ㄱ) */}
 export const BackToMain:React.FC=()=>{
 return (
-    /*<div className="flex flex-row items-start">
-        <Link to="/" className="mt-0 ml-2">
-            <img className="h-[30px] top-[10px] absolute w-[29px] left-3" alt="Line" src="/img/line-1.svg" />
-            <img className="h-[29px] top-[34px] absolute w-[29px] left-3" alt="Line" src="/img/line-2.svg" />
-        </Link>    
-        <div className="mt-1 ml-[60px] flex font-bold text-[60px] text-center [font-family:'Inter',Helvetica] text-[#27416d] tracking-[0] leading-[normal]">
-            FISH
-        </div>
-        <p className="mt-[40px] ml-[10px] [font-family:'Inter',Helvetica] font-medium text-transparent text-[20px] tracking-[0] leading-[normal]">
-            <span className="text-[#27416d]">: FI</span>
-            <span className="text-[#27416d80]">le</span>
-            <span className="text-[#27416d]"> SH</span>
-            <span className="text-[#27416d80]">are</span>
-        </p>
-    </div>
-    */
     <div className="absolute w-[500px] h-[100px] top-[-17px] left-[-142px]">
         <Link to="/">
             <div className="absolute w-[29px] h-[50px] top-[40px] left-[163px]">

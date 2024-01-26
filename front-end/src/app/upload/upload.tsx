@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import '../../tailwind.css';
 import { BackToMain } from '../../interface/back.tsx';
+import { Link } from 'react-router-dom';
 
 const UploadedFile:React.FC=()=>{
     return (
@@ -21,14 +22,41 @@ const UploadedFile:React.FC=()=>{
     )
 }
 
-function Dropdown() {
-    return (
-      <>
-        <li>마이페이지</li>
-        <li>로그아웃</li>
-      </>
-    );
-}
+// 그냥 select 태그 쓰면 됐었네... 머쓱
+/*const Dropdown = () => {
+    const [isExpanded, setIsExpanded] = useState(false);
+    const [articleType, setArticleType] = useState('전체');
+    const articleTypeList = ['전체', '질문', '자유'];
+
+    const articleBtnExpandHandler = () => {
+        setIsExpanded(!isExpanded);
+    };
+
+    const articleTypeHandler = (type: string) => {
+        setArticleType(type);
+    };
+
+    return(
+        <div className="flex flex-col w-full max-w-[132px] m-2 [font-family:'Inter-Regular',Helvetica] font-normal text-[#818da2] text-[20px] tracking-[0] leading-[normal] bg-[#E8FAFD] rounded-[50px] px-6 py-5">
+            {!isExpanded && (
+                <button onClick={articleBtnExpandHandler}>
+                {articleType}
+                </button>
+            )}
+            {isExpanded && (
+                <div onClick={articleBtnExpandHandler}
+                className="flex flex-col">
+                {articleTypeList.map((type, idx) => (
+                    <button key={type} onClick={() => articleTypeHandler(type)}>
+                    {type}
+                    {idx !== articleType.length - 1 && <hr />}
+                    </button>
+                ))}
+                </div>
+            )}
+        </div>
+	)
+}*/
 
 export const UploadPage:React.FC=()=>{
     const [view, setView] = useState(false);
@@ -36,13 +64,13 @@ export const UploadPage:React.FC=()=>{
     return (
         <div className="bg-white h-full flex flex-col items-center">
             {/* title */}
-            <div className="flex mt-8 font-bold text-[50px] text-center [font-family:'Inter',Helvetica] text-[#27416d] tracking-[0] leading-[normal]">
+            <div className="flex justify-center mt-8 font-bold text-[50px] text-center [font-family:'Inter',Helvetica] text-[#27416d] tracking-[0] leading-[normal]">
                 새로운 FISH 만들기
             </div>
             
-            <div className="flex flex-row w-full h-full justify-center">
+            <div className="flex flex-row w-full h-full justify-center gap-20">
                 {/* 왼쪽 박스 */}
-                <div className="flex flex-col items-center h-2/3 w-1/3 max-w-[521px] mt-10 mr-20 p-6 bg-[#e7fafc] rounded-[50px]">
+                <div className="flex flex-col items-center h-2/3 w-1/3 max-w-[521px] max-h-[592px] mt-10 p-6 bg-[#e7fafc] rounded-[50px]">
                     <div className="w-full h-3/4 flex flex-col items-center bg-[#f7fdff] rounded-[50px] border-2 border-dashed border-[#27416d]">
                         <div className="bg-black">
 
@@ -90,26 +118,27 @@ export const UploadPage:React.FC=()=>{
                     className="w-full m-2 [font-family:'Inter-Regular',Helvetica] font-normal text-[#818da2] text-[20px] tracking-[0] leading-[normal] bg-[#E8FAFD] rounded-[50px] px-6 py-5"
                     />
 
-                    <div className="flex flex-row mt-20">
+                    <div className="flex flex-row items-start mt-20 gap-10">
                         <div className="flex flex-col">
                             <div className="[font-family:'Inter',Helvetica] font-medium text-[#27416d] text-[20px] tracking-[0] leading-[normal]">
                                 유효기간
                             </div>
-                            <ul
-                            className="w-full m-2 [font-family:'Inter-Regular',Helvetica] font-normal text-[#818da2] text-[20px] tracking-[0] leading-[normal] bg-[#E8FAFD] rounded-[50px] px-6 py-5" 
-                            onClick={() => {setView(!view)}}>
-                                1시간{" "}
-                                {view? '^':'⌄'}
-                                {view && <Dropdown />}
-                            </ul>
+                            <select className="w-full bg-[#E8FAFD] m-2 [font-family:'Inter-Regular',Helvetica] font-normal text-[#818da2] text-[20px] rounded-[50px] px-6 py-5">
+                                <option value="1">1시간</option>
+                                <option value="2">6시간</option>
+                                <option value="3">24시간</option>
+                                <option value="4">1주 이상</option>
+                            </select>
                         </div>
-
+                        
+                        <Link to="/upload/pin">
                         <button
                             type="submit" 
-                            className="ml-10 mt-[40px] mb-[8px] [font-family:'Inter-Medium',Helvetica] font-medium text-[#27416d] text-[30px] text-center tracking-[0] leading-[normal] bg-[#E8FAFD] rounded-[50px] px-8"
+                            className="mt-[32px] [font-family:'Inter-Medium',Helvetica] font-medium text-[#27416d] text-[30px] text-center tracking-[0] leading-[normal] bg-[#E8FAFD] rounded-[50px] px-8 py-3"
                         >
                             만들기
                         </button>
+                        </Link>
                     </div>
                 </div>
 

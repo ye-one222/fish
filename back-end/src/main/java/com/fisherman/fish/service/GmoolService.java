@@ -122,7 +122,7 @@ public class GmoolService {
         }
         
         // 4. 해당 그물 저장
-        // - 멤버 Entity를 받아온다
+        // - 멤버 Entity를 받아온다 (유효한 계정인지 확인)
         if(gmoolDTO.getUserId() != null){
             // TODO : 멤버가 익명일 때, dto에 적히는 값이 null인지 ""인지 확인 필요
             // 익명이 아닌 경우
@@ -143,9 +143,8 @@ public class GmoolService {
                     null)
             );
         }
-        // - 그물 Entity를 생성한다.
+        // - 그물 Entity를 생성하여 파일 Entity와 연결한다.
         GmoolEntity gmoolEntity = GmoolEntity.toGmoolEntity(gmoolDTO);
-        // - 파일 Entity와 그물 Entity를 연결한다.
         for(FileEntity fe : fileEntities){
             fe.setGmoolEntity(gmoolEntity);
             gmoolEntity.addFileEntity(fe);

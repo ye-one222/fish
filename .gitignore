@@ -64,6 +64,9 @@ replay_pid*
 # git submodules (개인 설정파일)
 back-end/src/main/resources/*.yml
 
+# DB savefile
+dbtest.save*
+
 
 # React
 .DS_STORE

@@ -7,6 +7,10 @@ import com.fisherman.fish.service.GmoolService;
 import com.fisherman.fish.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,6 +21,7 @@ import java.util.List;
 public class MemberController {
     private final MemberService memberService;
     private final GmoolService gmoolService;
+    private final AuthenticationManager authenticationManager;
 
     @GetMapping("/")
     public List<MemberResponseDTO> getAllUsers(){
@@ -28,13 +33,17 @@ public class MemberController {
     @PostMapping("/login")
     public Object login(@RequestBody MemberRequestDTO loginRequestDTO){
         // 로그인 진행
-        return "maybe";
+        Authentication authentication = authenticationManager
+                .authenticate(new UsernamePasswordAuthenticationToken(loginRequestDTO.getId(), loginRequestDTO.getPassword()));
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        return SecurityContextHolder.getContext().getAuthentication().getName();
     }
 
     @PostMapping("/signup")
     public Object signup(@RequestBody MemberRequestDTO signupRequestDTO){
         // 받은 정보로 회원가입
         // TODO : BindingResult 적용?
+        // TODO : 아이디 예외처리 (금지단어, 정규식 처리 등)
         try {
             memberService.save(signupRequestDTO);
         } catch(DataIntegrityViolationException e){

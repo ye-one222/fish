@@ -1,10 +1,12 @@
 package com.fisherman.fish.controller;
 
 import com.fisherman.fish.dto.GmoolDTO;
-import com.fisherman.fish.dto.MemberDTO;
+import com.fisherman.fish.dto.MemberRequestDTO;
+import com.fisherman.fish.dto.MemberResponseDTO;
 import com.fisherman.fish.service.GmoolService;
 import com.fisherman.fish.service.MemberService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -12,27 +14,44 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/users")
-public class UserController {
+public class MemberController {
     private final MemberService memberService;
     private final GmoolService gmoolService;
 
     @GetMapping("/")
-    public List<MemberDTO> getAllUsers(){
+    public List<MemberResponseDTO> getAllUsers(){
         // 모든 user 반환
-        List<MemberDTO> members = memberService.getAllMembers();
+        List<MemberResponseDTO> members = memberService.getAllMembers();
         return members;
     }
 
-    @PostMapping("/")
-    public String signup(){
+    @PostMapping("/login")
+    public Object login(@RequestBody MemberRequestDTO loginRequestDTO){
+        // 로그인 진행
+        return "maybe";
+    }
+
+    @PostMapping("/signup")
+    public Object signup(@RequestBody MemberRequestDTO signupRequestDTO){
         // 받은 정보로 회원가입
-        return "ok";
+        // TODO : BindingResult 적용?
+        try {
+            memberService.save(signupRequestDTO);
+        } catch(DataIntegrityViolationException e){
+            // ID가 중복인 경우
+            e.printStackTrace(); // test
+            return "이미 존재하는 ID입니다";
+        } catch(Exception e){
+            e.printStackTrace(); // test
+            return "회원가입 실패";
+        }
+        return signupRequestDTO;
     }
 
     @GetMapping("/{id}")
     public String getUserById(@PathVariable(name="id") String id){
         // 해당 user의 정보 반환
-        MemberDTO member = memberService.searchById(id);
+        MemberResponseDTO member = memberService.searchById(id);
         if(member == null) return "no";
         return "yes";
     }
@@ -48,7 +67,7 @@ public class UserController {
     @GetMapping("/{id}/gmools")
     public String getUserGmool(@PathVariable(name="id") String id){
         // 해당 유저의 그물들 반환
-        MemberDTO memberDTO = memberService.searchById(id);
+        MemberResponseDTO memberDTO = memberService.searchById(id);
         if(memberDTO == null) return "no";
         List<GmoolDTO> gmools = gmoolService.findByUserId(memberDTO.getId());
         return "gmool of " + id;

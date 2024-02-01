@@ -6,13 +6,30 @@ export const DownLoadPage:React.FC = ()=>{
     const [pinInput,setPinInput] = useState<number|null>(null)
     const fishImages = ['🐠', '🐋','🐟' , '🐡', '🐬', '🐳']
 
-    function handlePinClick(){
-        setPinInput(null)
-    }
-    const EachPinInput:React.FC<string> = (props) => {
-        return <div className="bg-[#E8FAFD] rounded-[25px]">
-            <input type="text" className="text-black focus: outline-none w-5 "></input>
-            <button onClick = {handlePinClick} className="text-[50px]">{props}</button>
+    
+    const EachPinInput: React.FC<{ props: string }> = ({ props })=> {
+        const handlePinInput = (event) => {
+            const pinNum = event.target.value.replace(/[^0-9]/g,'') //문자열들어오면 입력은 되지만 핀번호로는 무시함
+            setPinInput(pinNum) //숫자만으로 핀인풋에 넣고 하나씩 들어갈때마다 버튼 하나씩 없어져야 함
+            console.log(pinNum) 
+        }
+        const handlePinClick = () => {
+                //setPinInput(null)
+                if(props==='🐠'){
+                    //버튼 숨기기
+                    setPinClick(true)
+        
+                }else{
+                    setPinInput(null)
+                    setPinClick(false)
+                }
+            }
+
+        return <div onClick = {handlePinClick} className="flex bg-[#E8FAFD] rounded-[25px] w-[70px]">
+            { pinClick&&props==='🐠' ? 
+                <input type="text" onChange={handlePinInput} className="flex items-center rounded-[25px] text-[#27416d] bg-[#E8FAFD] focus: outline-none max-w-full"></input>
+                    :<button  className="text-[50px]">{props}</button>
+            }
         </div>
     }
 
@@ -47,8 +64,7 @@ export const DownLoadPage:React.FC = ()=>{
         <h1 className="text-[50px]">FISH 받기</h1>
         <h1 className="text-[30px]">핀번호 6자리를 입력하세요</h1>
         <div className="flex flex-row">
-            {fishImages.map((each)=>(EachPinInput(each)))}
-            
+            {fishImages.map((each)=>(<EachPinInput key={each} props={each}/>))}
         </div>
     </div>
 }

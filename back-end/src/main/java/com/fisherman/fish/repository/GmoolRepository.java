@@ -7,5 +7,5 @@ import java.util.List;
 import java.util.Optional;
 
 public interface GmoolRepository extends JpaRepository<GmoolEntity, Long> {
-    Optional<List<GmoolEntity>> findByGmoolOwner_id(String uid);
+    Optional<List<GmoolEntity>> findByGmoolOwner_id(String uid); // 그물 게시자 id로 검색
 }

@@ -1,7 +1,7 @@
 package com.fisherman.fish.entity;
 
 //import com.fisherman.fish.repository.UploadRepository;
-import com.fisherman.fish.dto.MemberDTO;
+import com.fisherman.fish.dto.MemberRequestDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -40,8 +40,8 @@ public class MemberEntity {
         uploadedGmools.add(gmoolEntity);
     }
 
-    public static MemberEntity toMemberEntity(MemberDTO memberDTO){
-        // TODO
+    public static MemberEntity toMemberEntity(MemberRequestDTO memberDTO){
+        // TODO: toMemberEntity 완성
 
         return new MemberEntity(
                 memberDTO.getId(),

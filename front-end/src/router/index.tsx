@@ -1,11 +1,13 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import React from "react";
 import { MainPage } from "../app/main.tsx"
-import { DownLoadPage } from '../app/download.tsx';
+import { SearchPage } from '../app/download/search.tsx';
 import { LoginPage } from '../app/login.tsx';
 import { SignupPage } from '../app/signup.tsx';
 import { UploadPage } from '../app/upload/upload.tsx';
 import { AfterUploadPage } from '../app/upload/[pin]/page.tsx';
+import { DownLoadPage } from '../app/download/[pin]/page.tsx';
+
 //import { RouterProvider } from "react-router-dom";
 
 export type FishRouterPath = '/' | '/download' |'/login'|'/signup'|'/upload'

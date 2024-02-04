@@ -32,7 +32,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         if ("admin".equals(id)) {
             authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
         } else {
-            authorities.add(new SimpleGrantedAuthority("RONE_USER"));
+            authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
         }
         return new User(memberEntity.getId(), memberEntity.getPassword(), authorities);
     }

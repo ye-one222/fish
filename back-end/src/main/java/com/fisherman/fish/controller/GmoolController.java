@@ -21,6 +21,7 @@ public class GmoolController {
     public Object getGmools(){
         // 모든 그물 반환
         // TODO: 그물dto 반환 시 password는 주면 안된다!
+        // TODO: admin 권한 있는 경우만 보내주기
         List<GmoolDTO> gmools = gmoolService.findAll();
         return gmools;
     }
@@ -54,6 +55,7 @@ public class GmoolController {
 
     @GetMapping("/{gid}")
     public Object getGmool(@PathVariable(name="gid") Long gid){
+        // TODO : 비밀번호 맞춰야 함
         // 해당 그물 반환
         GmoolDTO gmool = gmoolService.findById(gid);
         if(gmool == null) return "no gmool for you!";
@@ -62,6 +64,7 @@ public class GmoolController {
 
     @GetMapping("/{gid}/files")
     public Object getFiles(@PathVariable(name="gid") Long gid){
+        // TODO : 비밀번호 맞춰야 함
         // 해당 그물의 파일 모두 반환
         // 그물 검색
         GmoolDTO gmoolDTO = gmoolService.findById(gid);
@@ -74,6 +77,7 @@ public class GmoolController {
 
     @GetMapping("/{gid}/files/{filename}")
     public Object getFile(@PathVariable(name="gid") Long gid, @PathVariable(name="filename") String filename){
+        // TOOD : 비밀번호 맞춰야 함
         // 해당 그물의 해당 파일 반환
         // 그물 검색
         GmoolDTO gmoolDTO = gmoolService.findById(gid);

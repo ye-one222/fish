@@ -42,7 +42,6 @@ public class MemberController {
     @PostMapping("/signup")
     public Object signup(@RequestBody MemberRequestDTO signupRequestDTO){
         // 받은 정보로 회원가입
-        // TODO : BindingResult 적용?
         // TODO : 아이디 예외처리 (금지단어, 정규식 처리 등)
         try {
             memberService.save(signupRequestDTO);

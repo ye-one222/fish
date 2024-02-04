@@ -14,7 +14,7 @@ import { FishRouter } from './router/index.tsx';
 function App() {
   return (
     <div className="MainCSS">
-        <FishRouter/>
+        <FishRouter />
     </div>
   );
 }

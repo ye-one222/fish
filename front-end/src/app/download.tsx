@@ -1,5 +1,6 @@
 import React, { useState } from "react"
 import '../tailwind.css';
+import { Link } from "react-router-dom";
 
 export const DownLoadPage:React.FC = ()=>{
     const [pinClick, setPinClick] = useState<boolean>(false)

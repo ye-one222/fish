@@ -46,7 +46,7 @@ export const SignupPage:React.FC=()=>{
                     <div className="w-full mt-[25px] ml-[40px] font-left text-[20px] [font-family:'Inter',Helvetica] text-[#27416d] tracking-[0] leading-[normal]">Password</div>
                     <input
                         required
-                        type="text"
+                        type="password"
                         className="w-full [font-family:'Inter-Regular',Helvetica] font-normal text-[#818da2] text-[20px] tracking-[0] leading-[normal] bg-[#E8FAFD] rounded-[50px] px-5 py-4"
                     />
 

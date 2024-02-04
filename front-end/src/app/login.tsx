@@ -20,7 +20,7 @@ export const LoginPage:React.FC=()=>{
                 />
                 <input
                     required
-                    type="text"
+                    type="password"
                     placeholder="Password"
                     className="w-1/3 mt-8 [font-family:'Inter-Regular',Helvetica] font-normal text-[#818da2] text-[20px] tracking-[0] leading-[normal] bg-[#E8FAFD] rounded-[50px] px-6 py-5"
                 />

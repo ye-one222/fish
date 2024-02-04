@@ -1,6 +1,7 @@
 import React from 'react'
 import { useParams } from 'react-router';
 import { BackToMain } from '../../../interface/back.tsx';
+import QRCode from 'qrcode.react';
 
 // 핀번호를 파라미터로 받아와야 하는데 아직 라우터가 안 돼서.. 나중에 해야할듯
 
@@ -47,6 +48,7 @@ const PinNumber: React.FC<PinNumberProps> = ({pin}) => {
 export const AfterUploadPage:React.FC=()=>{
     const { pin } = useParams<AfterUploadPageParams>()
     const realPin = '123456'; //백이랑 연결할 때 수정해야 함
+    const url = 'https://fish.me/123456';
 
     return (
         <div className="bg-white h-full flex flex-col items-center overflow-y-auto">
@@ -65,8 +67,8 @@ export const AfterUploadPage:React.FC=()=>{
             </div>
             
             {/* QR코드 자리 */}
-            <div className="flex items-center justify-center w-[318px] h-[318px] mt-4 rounded-[50px] border border-7 border-black">
-                QR코드
+            <div className="flex items-center justify-center min-w-[180px] min-h-[180px] rounded-[25px] mt-4 border-4 border-[#e8fafd]">
+                <QRCode value={JSON.stringify(url)}/>
             </div>
 
             <div className="flex mt-2 gap-4">
@@ -84,9 +86,9 @@ export const AfterUploadPage:React.FC=()=>{
                 링크를 공유해요
             </div>
             
-            {/* 이걸 넣으니까 QR을 담은 div가 쪼그라드는데,, 왜그런거지? */}
+            {/* 이걸 누르면 바로 copy 되게 구현? */}
             <button className="mt-10 w-[445px] h-[62px] bg-[#e8fafd] [font-family:'Inter-Bold',Helvetica] font-bold text-[#27416d] text-[30px] text-center tracking-[0] leading-[normal] rounded-[25px]">
-                https://fish.me/123456
+                {url}
             </button>
             
             {/* 좌측 상단 - 돌아가기 */}

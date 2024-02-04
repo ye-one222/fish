@@ -22,44 +22,77 @@ const UploadedFile:React.FC=()=>{
     )
 }
 
-// 그냥 select 태그 쓰면 됐었네... 머쓱
-/*const Dropdown = () => {
-    const [isExpanded, setIsExpanded] = useState(false);
-    const [articleType, setArticleType] = useState('전체');
-    const articleTypeList = ['전체', '질문', '자유'];
+const CreateFishForm = () => {
+    const durations = ['1시간', '6시간', '24시간', '1주 이상'];
 
-    const articleBtnExpandHandler = () => {
-        setIsExpanded(!isExpanded);
-    };
-
-    const articleTypeHandler = (type: string) => {
-        setArticleType(type);
-    };
-
-    return(
-        <div className="flex flex-col w-full max-w-[132px] m-2 [font-family:'Inter-Regular',Helvetica] font-normal text-[#818da2] text-[20px] tracking-[0] leading-[normal] bg-[#E8FAFD] rounded-[50px] px-6 py-5">
-            {!isExpanded && (
-                <button onClick={articleBtnExpandHandler}>
-                {articleType}
-                </button>
-            )}
-            {isExpanded && (
-                <div onClick={articleBtnExpandHandler}
-                className="flex flex-col">
-                {articleTypeList.map((type, idx) => (
-                    <button key={type} onClick={() => articleTypeHandler(type)}>
-                    {type}
-                    {idx !== articleType.length - 1 && <hr />}
-                    </button>
-                ))}
+    return (
+        <div className="flex flex-col">
+            <div className="flex flex-row justify-between mt-12">
+                <div className="[font-family:'Inter',Helvetica] font-medium text-[#27416d] text-[30px] tracking-[0] leading-[normal]">
+                    FISH 명
                 </div>
-            )}
+                <div className="mt-4 font-medium text-[15px] [font-family:'Inter',Helvetica] text-[#27416d] tracking-[0] leading-[normal]">
+                    선택사항
+                </div>
+            </div>
+            <input
+            required
+            type="text"
+            className="w-full m-2 [font-family:'Inter-Regular',Helvetica] font-normal text-[#818da2] text-[20px] tracking-[0] leading-[normal] bg-[#E8FAFD] rounded-[50px] px-6 py-5"
+            />
+
+            <div className="flex flex-row justify-between mt-8">
+                <div className="[font-family:'Inter',Helvetica] font-medium text-[#27416d] text-[30px] tracking-[0] leading-[normal]">
+                    암호 설정
+                </div>
+                <div className="mt-4 font-medium text-[15px] [font-family:'Inter',Helvetica] text-[#27416d] tracking-[0] leading-[normal]">
+                    선택사항
+                </div>
+            </div>
+            <input
+            required
+            type="password"
+            className="w-full m-2 [font-family:'Inter-Regular',Helvetica] font-normal text-[#818da2] text-[20px] tracking-[0] leading-[normal] bg-[#E8FAFD] rounded-[50px] px-6 py-5"
+            />
+
+            <div className="flex flex-row items-start mt-20 gap-10">
+                <div className="flex flex-col">
+                    <div className="[font-family:'Inter',Helvetica] font-medium text-[#27416d] text-[20px] tracking-[0] leading-[normal]">
+                        유효기간
+                    </div>
+                    <select className="w-full bg-[#E8FAFD] m-2 [font-family:'Inter-Regular',Helvetica] font-normal text-[#818da2] text-[20px] rounded-[50px] px-6 py-5">
+                        {durations.map((duration, index) => {
+                            return (
+                                <option key={index} value={index}>{duration}</option>
+                            )
+                        })}
+                    </select>
+                </div>
+                
+                <Link to="/upload/pin">
+                <button
+                    type="submit" 
+                    className="mt-[32px] [font-family:'Inter-Medium',Helvetica] font-medium text-[#27416d] text-[30px] text-center tracking-[0] leading-[normal] bg-[#E8FAFD] rounded-[50px] px-8 py-3"
+                >
+                    만들기
+                </button>
+                </Link>
+            </div>
         </div>
-	)
-}*/
+    )
+}
 
 export const UploadPage:React.FC=()=>{
     const [view, setView] = useState(false);
+    const fileInput = React.useRef(null);
+  
+    const handleButtonClick = e => {
+        fileInput.current.click();
+    };
+
+    const handleChange = e => {
+        console.log(e.target.files[0]);
+    };
     
     return (
         <div className="bg-white h-full flex flex-col items-center">
@@ -83,64 +116,20 @@ export const UploadPage:React.FC=()=>{
                         </div>
                         <img className="w-[158px] h-[158px] mt-[60px]" alt="Image" src="/img/image.png" />
                     </div>
-                    <button className="flex w-1/4 max-w-[500px] items-center justify-center mt-[300px] bg-[#f7fdff] font-medium text-[#27416d5e] text-[30px] text-center absolute [font-family:'Inter',Helvetica] tracking-[0] leading-[normal] rounded-[50px] p-5">
+                    <button 
+                    className="flex w-1/4 max-w-[500px] items-center justify-center mt-[300px] bg-[#f7fdff] font-medium text-[#27416d5e] text-[30px] text-center absolute [font-family:'Inter',Helvetica] tracking-[0] leading-[normal] rounded-[50px] p-5"
+                    onClick={handleButtonClick}>
                         파일 선택
-                    </button>                
+                    </button> 
+                    <input
+                    type = "file"
+                    className='hidden'
+                    ref={fileInput}
+                    onChange={handleChange}/>       
                 </div>
 
                 {/* 오른쪽 박스 */}
-                <div className="flex flex-col">
-                    <div className="flex flex-row justify-between mt-12">
-                        <div className="[font-family:'Inter',Helvetica] font-medium text-[#27416d] text-[30px] tracking-[0] leading-[normal]">
-                            FISH 명
-                        </div>
-                        <div className="mt-4 font-medium text-[15px] [font-family:'Inter',Helvetica] text-[#27416d] tracking-[0] leading-[normal]">
-                            선택사항
-                        </div>
-                    </div>
-                    <input
-                    required
-                    type="text"
-                    className="w-full m-2 [font-family:'Inter-Regular',Helvetica] font-normal text-[#818da2] text-[20px] tracking-[0] leading-[normal] bg-[#E8FAFD] rounded-[50px] px-6 py-5"
-                    />
-
-                    <div className="flex flex-row justify-between mt-8">
-                        <div className="[font-family:'Inter',Helvetica] font-medium text-[#27416d] text-[30px] tracking-[0] leading-[normal]">
-                            암호 설정
-                        </div>
-                        <div className="mt-4 font-medium text-[15px] [font-family:'Inter',Helvetica] text-[#27416d] tracking-[0] leading-[normal]">
-                            선택사항
-                        </div>
-                    </div>
-                    <input
-                    required
-                    type="text"
-                    className="w-full m-2 [font-family:'Inter-Regular',Helvetica] font-normal text-[#818da2] text-[20px] tracking-[0] leading-[normal] bg-[#E8FAFD] rounded-[50px] px-6 py-5"
-                    />
-
-                    <div className="flex flex-row items-start mt-20 gap-10">
-                        <div className="flex flex-col">
-                            <div className="[font-family:'Inter',Helvetica] font-medium text-[#27416d] text-[20px] tracking-[0] leading-[normal]">
-                                유효기간
-                            </div>
-                            <select className="w-full bg-[#E8FAFD] m-2 [font-family:'Inter-Regular',Helvetica] font-normal text-[#818da2] text-[20px] rounded-[50px] px-6 py-5">
-                                <option value="1">1시간</option>
-                                <option value="2">6시간</option>
-                                <option value="3">24시간</option>
-                                <option value="4">1주 이상</option>
-                            </select>
-                        </div>
-                        
-                        <Link to="/upload/pin">
-                        <button
-                            type="submit" 
-                            className="mt-[32px] [font-family:'Inter-Medium',Helvetica] font-medium text-[#27416d] text-[30px] text-center tracking-[0] leading-[normal] bg-[#E8FAFD] rounded-[50px] px-8 py-3"
-                        >
-                            만들기
-                        </button>
-                        </Link>
-                    </div>
-                </div>
+                <CreateFishForm />
 
                 {/* 좌측 상단 - 돌아가기 */}
                 <BackToMain />

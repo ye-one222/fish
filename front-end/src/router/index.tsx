@@ -32,10 +32,11 @@ const fishRouter = createBrowserRouter([
         path: '/upload',
         element: <UploadPage/>,
     },
-    /*{
-        path: `/upload/${pin}`,
+    {
+        //path: `/upload/${pin}`,
+        path: '/upload/pin',
         element: <AfterUploadPage/>
-    }*/
+    }
 ])
 
 // eslint-disable-next-line react/jsx-no-undef

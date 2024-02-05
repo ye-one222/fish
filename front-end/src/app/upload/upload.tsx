@@ -20,10 +20,10 @@ const UploadedFile:React.FC<UploadFileProps> = ( {name} )=>{
 }
 
 const CreateFishForm = () => {
-    const durations = ['1시간', '6시간', '24시간', '1주 이상'];
+    const durations = ['30분', '1시간', '2시간', '4시간', '6시간', '12시간'];
 
     return (
-        <div className="flex flex-col">
+        <form action="http://localhost:8080/gmool/" method="post" encType="multipart/form-data" className="flex flex-col">
             <div className="flex flex-row justify-between mt-12">
                 <div className="[font-family:'Inter',Helvetica] font-bold text-[#27416d] text-[28px] tracking-[0] leading-[normal]">
                     FISH 명
@@ -35,6 +35,7 @@ const CreateFishForm = () => {
             <input
             required
             type="text"
+            name="gmoolName"
             className="w-full m-2 [font-family:'Inter-Regular',Helvetica] font-normal text-[#818da2] text-[20px] tracking-[0] leading-[normal] bg-[#E8FAFD] rounded-[50px] px-6 py-5"
             />
 
@@ -49,6 +50,7 @@ const CreateFishForm = () => {
             <input
             required
             type="password"
+            name="password"
             className="w-full m-2 [font-family:'Inter-Regular',Helvetica] font-normal text-[#818da2] text-[20px] tracking-[0] leading-[normal] bg-[#E8FAFD] rounded-[50px] px-6 py-5"
             />
 
@@ -57,7 +59,7 @@ const CreateFishForm = () => {
                     <div className="[font-family:'Inter',Helvetica] font-bold text-[#27416d] text-[20px] tracking-[0] leading-[normal]">
                         유효기간
                     </div>
-                    <select className="w-full bg-[#E8FAFD] m-2 [font-family:'Inter-Regular',Helvetica] font-normal text-[#818da2] text-[20px] rounded-[50px] px-6 py-5">
+                    <select name="dueMinute" className="w-full bg-[#E8FAFD] m-2 [font-family:'Inter-Regular',Helvetica] font-normal text-[#818da2] text-[20px] rounded-[50px] px-6 py-5">
                         {durations.map((duration, index) => {
                             return (
                                 <option key={index} value={index}>{duration}</option>
@@ -75,7 +77,7 @@ const CreateFishForm = () => {
                 </button>
                 </Link>
             </div>
-        </div>
+        </form>
     )
 }
 
@@ -98,6 +100,14 @@ export const UploadPage:React.FC=()=>{
     return (
         <div className="bg-white h-full flex flex-col items-center">
             {/* title */}
+            <form action="http://localhost:8080/gmool/" method="post" encType="multipart/form-data">
+                
+                그물명: <input type="text" name="gmoolName"/> <br/>
+                그물암호: <input type="password" name="password"/> <br/>
+                유효기간: <input type="text" name="dueMinute"/> <br/>
+                파일: <input type="file" name="files" multiple /><br/>
+                <input type="submit" value="보내기" />
+            </form>
             <div className="flex justify-center mt-8 font-bold text-[50px] text-center [font-family:'Inter',Helvetica] text-[#27416d] tracking-[0] leading-[normal]">
                 새로운 FISH 만들기
             </div>
@@ -129,7 +139,9 @@ export const UploadPage:React.FC=()=>{
                         파일 선택
                     </button> 
                     <input
+                    multiple
                     type = "file"
+                    name="files"
                     className='hidden'
                     ref={fileInput}
                     onChange={handleChange}/>       

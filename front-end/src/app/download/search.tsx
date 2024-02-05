@@ -1,5 +1,4 @@
 import React, { useState } from "react"
-import '../tailwind.css';
 //import { hover } from "@testing-library/user-event/dist/hover";
 
 export const SearchPage:React.FC = ()=>{
@@ -8,20 +7,15 @@ export const SearchPage:React.FC = ()=>{
     const [isPin, setIsPin] = useState<boolean>(false)  //핀하고 그물암호 있으면 false로 변경
     const [hasGmool, setHasGmool] = useState<boolean>(false)
 
-    const EachPadBtn:React.FC<number> = (props ) => {
+    const EachPadBtn:React.FC<number> = ( props ) => {
         
-        if( props===11 ){
-            return <button className="bg-[#E8FAFD] rounded-[20px] w-[67px] h-[67px] text-[20px]">back</button>
+        const handleBackBtn = () => {
+            setPinNum(pinNum.slice(0,-1))
         }
-        else if(props === 9){
-            return <h1 className=" w-[67px] h-[67px] text-[30px] text-white">0</h1>
-        }
-        else if(props === 10) { props = props - 1}
-
-        props = (props + 1) % 10
-
-        const handlePinInput = () =>{
+        
+        const handlePinInput = () => {
             setPinNum(pinNum+(props))
+
             if( pinNum.length === 5 ){
                 //pinNum으로 디비에서 파일 찾고
                 //그물암호가 있다면
@@ -30,8 +24,24 @@ export const SearchPage:React.FC = ()=>{
             }
         }
 
-        return <button onClick={handlePinInput} className="bg-[#EFFCFE] rounded-[20px] w-[67px] h-[67px] text-[30px]">{props}</button>
-        
+        if( props === 11 )
+        {
+            return <button onClick={handleBackBtn} className="bg-[#E8FAFD] rounded-[20px] w-[67px] h-[67px] text-[20px]">back</button>
+        }
+        else if( props === 9 )
+        {
+            return <h1 className=" w-[67px] h-[67px] text-[30px] text-white">0</h1>
+        }
+        else if( props === 10 ) 
+        { props = props - 1}
+
+        props = ( props + 1 ) % 10
+
+        return <button 
+            onClick={ handlePinInput } 
+            className="bg-[#EFFCFE] rounded-[20px] w-[67px] h-[67px] text-[30px]">
+                {props}
+            </button>
     }
 
     return <div className="flex flex-col gap-5 items-center justify-center h-full">

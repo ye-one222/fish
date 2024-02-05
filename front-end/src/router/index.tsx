@@ -18,7 +18,7 @@ const fishRouter = createBrowserRouter([
     },
     {
         path:'/download',
-        element: <DownLoadPage />,
+        element: <SearchPage />,
     },
     {
         path:'/login',

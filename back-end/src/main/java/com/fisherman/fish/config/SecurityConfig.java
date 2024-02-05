@@ -1,28 +1,51 @@
 package com.fisherman.fish.config;
 
+import com.fisherman.fish.jwt.JWTUtil;
+import com.fisherman.fish.jwt.LoginFilter;
 import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
+import org.apache.catalina.User;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.header.writers.frameoptions.XFrameOptionsHeaderWriter;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+@RequiredArgsConstructor
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+    private final AuthenticationConfiguration configuration;
+    private final JWTUtil jwtUtil;
+
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        LoginFilter loginFilter = new LoginFilter(authenticationManager(configuration), jwtUtil);
+        loginFilter.setFilterProcessesUrl("/users/login");
         http
                 .authorizeHttpRequests((authorizedHttpRequests) -> authorizedHttpRequests
-                        // 모든 경로 권한 허용 (일시)
-                        .requestMatchers(new AntPathRequestMatcher("/**")).permitAll())
-                .csrf((csrf) -> csrf
-                        // csrf
-                        .ignoringRequestMatchers(new AntPathRequestMatcher("/**")))
+                        .requestMatchers("/h2-console/**").permitAll() // h2 콘솔 허용
+                        .requestMatchers("/users/login", "/users/signup").permitAll() // 로그인, 회원 가입 경로 허용
+                        .requestMatchers("/admin").hasRole("ADMIN")
+                        .anyRequest().permitAll()
+                )
+                // csrf는 필요 없다
+                .csrf((auth) -> auth.disable())
+                // form 로그인 방식 해제
+                .formLogin((auth) -> auth.disable())
+                // http basic 인증 방식 해제 (찾아봐야 할듯)
+                .httpBasic((auth) -> auth.disable())
+                // 로그인 필터 등록 (UsernamePasswordAuthenticationFilter 위치에)
+                .addFilterAt(loginFilter, UsernamePasswordAuthenticationFilter.class)
+                .sessionManagement((session) -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 세선 정책 설정 (rest api에 필요)
                 .headers((headers) -> headers
                         // 프레임 관련 (h2 콘솔 띄우기용)
                         .addHeaderWriter(new XFrameOptionsHeaderWriter(
@@ -31,7 +54,13 @@ public class SecurityConfig {
 
         return http.build();
     }
-    
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
+        return configuration.getAuthenticationManager();
+    }
+
+
     @Bean
     PasswordEncoder passwordEncoder() {
         // 암호화 인코더 인터페이스 지정

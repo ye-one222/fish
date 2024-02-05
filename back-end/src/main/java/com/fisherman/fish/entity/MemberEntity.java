@@ -36,6 +36,9 @@ public class MemberEntity {
     @OneToMany(mappedBy = "gmoolOwner", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<GmoolEntity> uploadedGmools;
 
+    @Column
+    private String role;
+
     public void addUploadedGmools(GmoolEntity gmoolEntity){
         uploadedGmools.add(gmoolEntity);
     }
@@ -48,7 +51,8 @@ public class MemberEntity {
                 memberDTO.getPassword(),
                 memberDTO.getFirstName(),
                 memberDTO.getLastName(),
-                new ArrayList<>()
+                new ArrayList<>(),
+                "ROLE_USER"
         );
     }
 }

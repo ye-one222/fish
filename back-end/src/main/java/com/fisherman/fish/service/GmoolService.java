@@ -43,7 +43,6 @@ public class GmoolService {
         Optional<GmoolEntity> optionalGmoolEntity = gmoolRepository.findById(gid);
         if(optionalGmoolEntity.isEmpty()) return null; // 그물이 존재하지 않는 경우 null 반환
         // Member 엔티티도 같이 검색 (아직 Proxy 객체로 채워져있음)
-        //GmoolEntity gmoolEntity = optionalGmoolEntity.get();
         // DTO로 변환하여 반환
         return GmoolDTO.toGmoolDTO(optionalGmoolEntity.get());
     }

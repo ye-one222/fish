@@ -22,7 +22,7 @@ function App() {
 
   return (
     <div className="MainCSS">
-        <FishRouter/>
+        <FishRouter />
     </div>
   );
 }

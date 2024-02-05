@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import '../tailwind.css';
 import { Link } from 'react-router-dom';
 //import { Link } from 'react-router-dom';
@@ -68,6 +68,12 @@ const DownButton:React.FC= () => {
 export const MainPage:React.FC=()=>{
     const [userID,setUserID] = useState<string|null>('')
 
+    useEffect(() => {
+        fetch('http://localhost:8080/gmool')
+        .then((response) => response.json())
+        .then((data) => console.log(data));
+      }, []);
+      
     function handleLogOutBtn() {
         setUserID(null);
     }

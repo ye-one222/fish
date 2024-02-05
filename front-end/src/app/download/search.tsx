@@ -1,4 +1,5 @@
 import React, { useState } from "react"
+import { BackToMain } from "../../interface/back.tsx"
 //import { hover } from "@testing-library/user-event/dist/hover";
 
 export const SearchPage:React.FC = ()=>{
@@ -45,7 +46,7 @@ export const SearchPage:React.FC = ()=>{
     }
 
     return <div className="flex flex-col gap-5 items-center justify-center h-full">
-        
+        <BackToMain/>
         <h1 className="text-[50px]">FISH 받기</h1>
         <h1 className="text-[30px]">핀번호 6자리를 입력하세요</h1>
         <div className="flex flex-row gap-2 ">

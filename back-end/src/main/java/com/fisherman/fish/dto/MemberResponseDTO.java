@@ -1,15 +1,13 @@
 package com.fisherman.fish.dto;
 
 import com.fisherman.fish.entity.MemberEntity;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class MemberResponseDTO {
     private String id; // 아이디
     private String firstName; // 이름

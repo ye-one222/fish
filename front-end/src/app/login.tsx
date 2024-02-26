@@ -24,8 +24,20 @@ export const LoginPage:React.FC=()=>{
                 password: pw,
             })
         })
-        .then((response) => response.json())
-        .then((data) => {});
+        //.then((response) => response.json())
+        .then((data) => {
+            /*if(data.id){
+                //login success Let's get token
+                console.log(data.token)
+                //토큰 받아서 로컬 스트리지 or 세션 스토리지에 저장 + 로그아웃할때 취소
+                localStorage.setItem("login-token",data.token)
+                localStorage.setItem("user-id", data.id)
+                //setLoginFin(true)
+            }
+            else{
+                alert(data.message);
+            }*/
+        });
     }
 
 

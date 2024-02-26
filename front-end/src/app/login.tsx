@@ -3,6 +3,31 @@ import { Link } from 'react-router-dom'
 import { BackToMain } from '../interface/back.tsx'
 
 export const LoginPage:React.FC=()=>{
+    const [ id, setId ] = useState<string|null>(null);
+    const [ pw, setPw ] = useState<string|null>(null);
+
+    const handleIDInput = (e) => {
+        setId(e.target.value);
+    }
+    const handlePwInput = (e) => {
+        setPw(e.target.value);
+    }
+
+    const submitHandler = () => {
+        fetch('http://localhost:8080/users/login', {
+            method: 'post',
+            headers: {
+                "Content-Type":"application/json; charset=utf-8"
+            },
+            body: JSON.stringify({
+                id: id,
+                password: pw,
+            })
+        })
+        .then((response) => response.json())
+        .then((data) => {});
+    }
+
 
     return (
         <div className="bg-white h-full flex flex-col items-center justify-center">
@@ -12,13 +37,14 @@ export const LoginPage:React.FC=()=>{
             </div>
 
             {/* login form */}
-            <form action="http://localhost:8080/users/login" method="post" className="flex flex-col w-full items-center justify-center">
+            <div className="flex flex-col w-full items-center justify-center">
                 <input
                     required
                     name="id"
                     type="text"
                     placeholder="ID"
                     className="w-1/3 mt-20 [font-family:'Inter-Regular',Helvetica] font-normal text-[#818da2] text-[20px] tracking-[0] leading-[normal] bg-[#E8FAFD] rounded-[50px] px-6 py-5"
+                    onChange={ handleIDInput }
                 />
                 <input
                     required
@@ -26,15 +52,16 @@ export const LoginPage:React.FC=()=>{
                     type="password"
                     placeholder="Password"
                     className="w-1/3 mt-8 [font-family:'Inter-Regular',Helvetica] font-normal text-[#818da2] text-[20px] tracking-[0] leading-[normal] bg-[#E8FAFD] rounded-[50px] px-6 py-5"
+                    onChange={ handlePwInput }
                 />
 
                 <button
-                    type="submit"
                     className="mt-10 [font-family:'Inter-Medium',Helvetica] font-medium text-[#27416d] text-[30px] text-center tracking-[0] leading-[normal] bg-[#E8FAFD] rounded-[50px] px-20 py-4"
+                    onClick={ submitHandler }
                 >
                     Log In
                 </button>
-            </form>
+            </div>
             <Link to="/signup" className="mt-8">
                 <div className="[font-family:'Inter-Regular',Helvetica] font-normal text-[#27416d] text-[18px] text-center tracking-[0] leading-[normal]">
                     회원가입

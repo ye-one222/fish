@@ -143,7 +143,7 @@ export const UploadPage:React.FC=()=>{
                         )}
                     </div>
                     <button 
-                        className="flex w-1/2 max-w-[500px] items-center justify-center bg-[#f7fdff] font-medium text-[#27416d5e] text-[28px] text-center [font-family:'Inter',Helvetica] tracking-[0] leading-[normal] rounded-[50px] p-5"
+                        className="flex w-1/2 max-w-[500px] items-center justify-center bg-[#f7fdff] font-medium text-[#27416d5e] text-[28px] text-center [font-family:'Inter',Helvetica] tracking-[0] leading-[normal] rounded-[50px] p-5 border border-transparent hover:border-[#27416d] hover:text-[#27416d]"
                         onClick={handleButtonClick}>
                         파일 선택
                     </button> 
@@ -205,7 +205,7 @@ export const UploadPage:React.FC=()=>{
                         <Link to="/upload/pin">
                         <button
                             type="submit" 
-                            className="mt-[32px] [font-family:'Inter-Medium',Helvetica] font-bold text-[#27416d] text-[30px] text-center tracking-[0] leading-[normal] bg-[#E8FAFD] rounded-[50px] px-9 py-3"
+                            className="mt-[32px] [font-family:'Inter-Medium',Helvetica] font-bold text-[#27416d] text-[30px] text-center tracking-[0] leading-[normal] bg-[#E8FAFD] rounded-[50px] px-9 py-3 border border-transparent hover:border-[#27416d]"
                             value="보내기"
                         >
                             만들기

@@ -2,6 +2,7 @@ import React from 'react'
 import { useParams } from 'react-router';
 import { BackToMain } from '../../../interface/back.tsx';
 import QRCode from 'qrcode.react';
+import { CopyToClipboard } from "react-copy-to-clipboard";
 
 // 핀번호를 파라미터로 받아와야 하는데 아직 라우터가 안 돼서.. 나중에 해야할듯
 
@@ -67,14 +68,14 @@ export const AfterUploadPage:React.FC=()=>{
             </div>
             
             {/* QR코드 자리 */}
-            <div className="flex items-center justify-center min-w-[180px] min-h-[180px] rounded-[25px] mt-4 border-4 border-[#e8fafd]">
+            <div className="flex items-center justify-center min-w-[200px] min-h-[200px] rounded-[25px] mt-4 border-4 border-[#e8fafd]">
                 <QRCode value={JSON.stringify(url)}/>
             </div>
 
             <div className="flex mt-2 gap-4">
-                <button className="w-[151px] h-[67px] bg-[#e8fafd] rounded-[25px] [font-family:'Inter-Bold',Helvetica] font-bold text-center tracking-[0] leading-[normal] text-[#27416dcc] text-[25px]">
+                {/*<button className="w-[151px] h-[67px] bg-[#e8fafd] rounded-[25px] [font-family:'Inter-Bold',Helvetica] font-bold text-center tracking-[0] leading-[normal] text-[#27416dcc] text-[25px]">
                     다운로드
-                </button>
+                </button>*/}
             </div>
 
             <div className="mt-6 w-[286px] h-[57px] text-[#27416d] text-[30px] [font-family:'Inter-Bold',Helvetica] font-bold text-center tracking-[0] leading-[normal]">
@@ -84,10 +85,12 @@ export const AfterUploadPage:React.FC=()=>{
             </div>
             
             {/* 이걸 누르면 바로 copy 되게 구현? */}
-            <button className="mt-10 w-[445px] h-[62px] bg-[#e8fafd] [font-family:'Inter-Bold',Helvetica] font-bold text-[#27416d] text-[30px] text-center tracking-[0] leading-[normal] rounded-[25px]">
-                {url}
-            </button>
-            
+            <CopyToClipboard text={url} onCopy={()=>alert("주소가 복사되었습니다!")}>
+                <button className="mt-10 w-[445px] h-[62px] bg-[#e8fafd] [font-family:'Inter-Bold',Helvetica] font-bold text-[#27416d] text-[30px] text-center tracking-[0] leading-[normal] rounded-[25px] border border-transparent hover:border-[#27416d]">
+                    {url}
+                </button>
+            </CopyToClipboard>
+
             {/* 좌측 상단 - 돌아가기 */}
             <BackToMain />
         </div>

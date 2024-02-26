@@ -17,7 +17,7 @@ public class GmoolController {
     private final GmoolService gmoolService;
     private final MemberService memberService;
 
-    @GetMapping("/")
+    @GetMapping
     public Object getGmools(){
         // 모든 그물 반환
         // TODO: 그물dto 반환 시 password는 주면 안된다!
@@ -26,7 +26,7 @@ public class GmoolController {
         return gmools;
     }
     
-    @PostMapping("/")
+    @PostMapping
     public GmoolDTO createGmool(@ModelAttribute("gmool") GmoolReceiveDTO gmoolReceiveDTO){
         System.out.println("GmoolController: [POST at '/gmool'] "); // test
         // 예외처리 : DTO 없이 POST 요청 보낸 경우
@@ -45,8 +45,8 @@ public class GmoolController {
             System.out.println("- WARNING: due minute is not set; it would be set to default (" + defaultTime + ")");
             gmoolReceiveDTO.setDueMinute(defaultTime);
         }
-        // TODO : 그물 생성시각 할당
-        // TODO : 파일 개수 할당
+        // TODO : 그물 생성시각 할당 (완)
+        // TODO : 파일 개수 할당 (완)
         GmoolDTO gmoolDTO = new GmoolDTO(gmoolReceiveDTO); // 첨부파일을 fileDTO로 만듬
         GmoolDTO savedDTO = gmoolService.save(gmoolDTO);
         System.out.println("GmoolController: saved gmool.");

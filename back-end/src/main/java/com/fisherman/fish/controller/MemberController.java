@@ -23,7 +23,7 @@ public class MemberController {
     private final GmoolService gmoolService;
     private final AuthenticationManager authenticationManager;
 
-    @GetMapping("/")
+    @GetMapping
     public List<MemberResponseDTO> getAllUsers(){
         // 모든 user 반환
         List<MemberResponseDTO> members = memberService.getAllMembers();
@@ -43,6 +43,7 @@ public class MemberController {
     public Object signup(@RequestBody MemberRequestDTO signupRequestDTO){
         // 받은 정보로 회원가입
         // TODO : 아이디 예외처리 (금지단어, 정규식 처리 등)
+        System.out.println("sign up request by " + signupRequestDTO.toString());
         try {
             memberService.save(signupRequestDTO);
         } catch(DataIntegrityViolationException e){

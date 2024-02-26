@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom';
 import { BackToMain } from '../interface/back.tsx'
 
 export const SignupPage:React.FC=()=>{
@@ -7,6 +8,7 @@ export const SignupPage:React.FC=()=>{
     const [ id, setId ] = useState<string|null>(null);
     const [ pw, setPw ] = useState<string|null>(null);
     const [ isValid, setIsValid ] = useState<boolean>(false);
+    const navigate = useNavigate();
 
     const handleFirstNameInput = (e) => {
         setFirstName(e.target.value);
@@ -48,7 +50,16 @@ export const SignupPage:React.FC=()=>{
             })
         })
         .then((response) => response.json())
-        .then((data) => {console.log(data);});
+        .then((data) => {
+            if(data.id){
+                console.log(data);
+                alert("회원가입이 완료되었습니다:) \n로그인 페이지로 이동합니다!");
+                navigate('/login');
+            }else{
+                //실패하면 서버에서 반환하는게 그냥 string이라 파싱할 때 오류나서 여기까지 안옴 ..
+                alert("회원가입에 실패하였습니다:(");
+            }
+        })
     }
 
     return (

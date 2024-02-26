@@ -100,14 +100,6 @@ export const UploadPage:React.FC=()=>{
     return (
         <div className="bg-white h-full flex flex-col items-center">
             {/* title */}
-            <form action="http://localhost:8080/gmool/" method="post" encType="multipart/form-data">
-                
-                그물명: <input type="text" name="gmoolName"/> <br/>
-                그물암호: <input type="password" name="password"/> <br/>
-                유효기간: <input type="text" name="dueMinute"/> <br/>
-                파일: <input type="file" name="files" multiple /><br/>
-                <input type="submit" value="보내기" />
-            </form>
             <div className="flex justify-center mt-8 font-bold text-[50px] text-center [font-family:'Inter',Helvetica] text-[#27416d] tracking-[0] leading-[normal]">
                 새로운 FISH 만들기
             </div>

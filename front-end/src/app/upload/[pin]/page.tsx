@@ -75,9 +75,6 @@ export const AfterUploadPage:React.FC=()=>{
                 <button className="w-[151px] h-[67px] bg-[#e8fafd] rounded-[25px] [font-family:'Inter-Bold',Helvetica] font-bold text-center tracking-[0] leading-[normal] text-[#27416dcc] text-[25px]">
                     다운로드
                 </button>
-                <button className="w-[151px] h-[67px] bg-[#e8fafd] rounded-[25px] [font-family:'Inter-Bold',Helvetica] font-bold text-center tracking-[0] leading-[normal] text-[#27416dcc] text-[25px]">
-                    공유하기
-                </button>
             </div>
 
             <div className="mt-6 w-[286px] h-[57px] text-[#27416d] text-[30px] [font-family:'Inter-Bold',Helvetica] font-bold text-center tracking-[0] leading-[normal]">

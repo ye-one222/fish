@@ -14,6 +14,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -75,7 +77,17 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         System.out.println("Hello, " + user.getUsername() + " / " + role);
 
         String token = jwtUtil.createJwt(id, role, tokenExpiredMs);
-        response.addHeader("Authorization", "Bearer " + token);
+        //response.addHeader("Authorization", "Bearer " + token);
+        try {
+            // body로 jwt 발급
+            ObjectMapper mapper = new ObjectMapper();
+            PrintWriter writer = response.getWriter();
+            Map<String, String> jwtBody = new HashMap<>();
+            jwtBody.put("Authorization", "Bearer " + token);
+            writer.println(mapper.writeValueAsString(jwtBody));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override

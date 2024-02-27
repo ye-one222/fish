@@ -36,7 +36,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         // 요청에서 id, password 추출
         String id, password;
         System.out.println("content-type : " + request.getHeader("content-type")); // test
-        if(request.getHeader("content-type").equals("application/json")) {
+        if(request.getHeader("content-type").startsWith("application/json")) {
             try {
                 // json으로 요청한 경우 파싱한다
                 BufferedReader br = request.getReader();

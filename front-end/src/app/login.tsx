@@ -25,21 +25,19 @@ export const LoginPage:React.FC=()=>{
             })
         })
         .then((response) => {
-            response.text();
-            /*for(let [key,value] of response.headers){
-                console.log(`${key} : ${value}`);
-            }
-            response.headers.forEach(([key, value]) => console.log(`${key} : ${value}`));*/
-            //console.log(Headers.headers.get("Authorization"));
+            response.json().then((data) => {
+                console.log(data);
+                localStorage.setItem("fish-login-token",data.Authorization);
+            })
         })
         .then((data) => {
             //if(data)
-              //  console.log(data);
+            //console.log(data);
             /*if(data.id){
                 //login success Let's get token
                 console.log(data.token)
                 //토큰 받아서 로컬 스트리지 or 세션 스토리지에 저장 + 로그아웃할때 취소
-                localStorage.setItem("login-token",data.token)
+                
                 localStorage.setItem("user-id", data.id)
                 //setLoginFin(true)
             }

@@ -17,15 +17,24 @@ export const LoginPage:React.FC=()=>{
         fetch('http://localhost:8080/users/login', {
             method: 'post',
             headers: {
-                "Content-Type":"application/json"
+                "Content-Type":"application/json; charset=utf-8"
             },
             body: JSON.stringify({
                 id: id,
                 password: pw,
             })
         })
-        .then((response) => response.text())
+        .then((response) => {
+            response.text();
+            /*for(let [key,value] of response.headers){
+                console.log(`${key} : ${value}`);
+            }
+            response.headers.forEach(([key, value]) => console.log(`${key} : ${value}`));*/
+            //console.log(Headers.headers.get("Authorization"));
+        })
         .then((data) => {
+            //if(data)
+              //  console.log(data);
             /*if(data.id){
                 //login success Let's get token
                 console.log(data.token)

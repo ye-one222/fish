@@ -115,7 +115,7 @@ export const MainPage:React.FC=()=>{
                 
             </div>
         </div>
-        <h1 className='text-[150px] absolute bottom-0 right-3/4'>🪸</h1>
-        <h1 className='text-[100px] absolute bottom-0 left-3/4'>🪸</h1>
+        <h1 className='text-[150px] absolute bottom-0 right-3/4'><img src="/img/coral.png" className="w-[350px]"/></h1>
+        <h1 className='text-[100px] absolute bottom-0 left-3/4'><img src="/img/coral.png" className="w-[200px]"/></h1>
     </div>)
 }

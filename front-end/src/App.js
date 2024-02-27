@@ -14,7 +14,11 @@ import { FishRouter } from './router/index.tsx';
 function App() {
 /*
   useEffect(() => {
+<<<<<<< HEAD
     fetch('http://localhost:8080/gmool/1/files')
+=======
+    fetch('http://localhost:8080/gmool')
+>>>>>>> 7f394003702c05a2d082ec2c64de7021a01c7801
     .then((response) => response.json())
     .then((data) => console.log(data));
   }, []);

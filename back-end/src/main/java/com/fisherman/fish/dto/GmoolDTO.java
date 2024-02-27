@@ -6,9 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.io.File;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +32,7 @@ public class GmoolDTO {
         id = g.getId();
         gmoolName = g.getGmoolName();
         password = g.getPassword();
-        createdTime = g.getCreatedTime(); // TODO: null이면 직접 부여
+        createdTime = g.getCreatedTime(); // TODO: null이면 직접 부여 (완)
         dueMinute = g.getDueMinute();
         pinNumber = g.getPinNumber();
         fileDTOList = g.convertFilesToFileDTOList();

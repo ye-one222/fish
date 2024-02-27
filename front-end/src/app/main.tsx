@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import '../tailwind.css';
 import { Link } from 'react-router-dom';
 //import { Link } from 'react-router-dom';
@@ -9,7 +9,7 @@ const EachFileShow:React.FC = (props) => {
 
     return <div>
         { props[1]<5 ? <button className='text-[20px]'>🐟</button>
-            :(props[1]<10) ? <button className='text-[30px]'>🐠</button>
+            :(props[1] <10) ? <button className='text-[30px]'>🐠</button>
                 :<button className='text-[50px]'>🐳</button>}
         <h1 className='text-[15px]'>{props[0]}</h1>
     </div>
@@ -37,7 +37,7 @@ const FileUploadInput:React.FC=()=>{
         event?.preventDefault();
     }
 
-    return <div className='flex flex-col justify-center bg-white w-1/3 max-w-[521px] rounded-[50px]'>
+    return <div className='h-full flex flex-col justify-center bg-white w-1/3 max-w-[521px] rounded-[50px]'>
         <h1 className='text-[50px] font-semibold flex justify-center mt-4 '>FISH 보내기</h1>
         <label 
         onDragStart={handleDragStart} 
@@ -47,9 +47,10 @@ const FileUploadInput:React.FC=()=>{
         onDrop={handleDrop}
             className={`mt-3 m-9 h-full border-2 border-dashed rounded-[50px] hover:border-[#27416D] flex flex-col
                 ${active? 'border-[#27416D] bg-[#879DB4]':'border-[#879DB4] bg-[#F7FDFF]'} justify-center items-center`}> 
-            <input type='file' className='hidden'></input>
-            <h1 className='text-[100px]'>🐟</h1>
-            <h1 className='text-[30px]'>파일을 여기에</h1><h1 className='text-[30px]'>끌어주세요</h1>
+            <input type='file' className='w-full hidden'/> 
+                <h1 className='text-[100px]'>🐟</h1>
+                <h1 className='text-[30px]'>파일을 여기에</h1><h1 className='text-[30px]'>끌어주세요</h1>
+           
         </label>
     </div>
 }
@@ -67,19 +68,13 @@ const DownButton:React.FC= () => {
 
 export const MainPage:React.FC=()=>{
     const [userID,setUserID] = useState<string|null>('')
-
-    useEffect(() => {
-        fetch('http://localhost:8080/gmool')
-        .then((response) => response.json())
-        .then((data) => console.log(data));
-      }, []);
       
     function handleLogOutBtn() {
         setUserID(null);
     }
 
     return (<div className='MainPageCSS'>
-        <div className='flex flex-row items-end '>
+        <div className='flex flex-row items-end'>
             <h1 className='text-[75px] font-bold'>FISH</h1>
             <div className='flex flex-row m-4 font-sans text-[30px] font-medium'>
                 <h1>:FI</h1><h1 className='mr-2 text-[#879DB4]'>le</h1>
@@ -97,16 +92,18 @@ export const MainPage:React.FC=()=>{
                         <Link to={'/login'}>
                             <button className='rounded-3xl bg-white mb-2 mr-2 pl-3 pr-3 
                                 border border-white hover:border-[#27416D] transition-all'>
-                                    LOG IN</button></Link>
+                                    LOG IN</button>
+                        </Link>
                         <Link to={'/signup'}>
                             <button className='rounded-3xl pl-3 pr-3 border border-[#E8FAFD] hover:border-[#27416D] transition-all'>
-                            SIGN UP</button></Link>
+                            SIGN UP</button>
+                        </Link>
                     </div>
             }
         </div>
         <div className='flex flex-row gap-4 w-full justify-center'>
             <FileUploadInput/>
-            <div className='flex flex-col w-1/3 max-w-[430px]'>
+            <div className='h-full flex flex-col w-1/3 max-w-[430px]'>
                 <DownButton/>
                 {userID ? <MyFishCom/>:
                     <div>

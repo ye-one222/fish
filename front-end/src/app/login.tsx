@@ -17,14 +17,14 @@ export const LoginPage:React.FC=()=>{
         fetch('http://localhost:8080/users/login', {
             method: 'post',
             headers: {
-                "Content-Type":"application/json; charset=utf-8"
+                "Content-Type":"application/json"
             },
             body: JSON.stringify({
                 id: id,
                 password: pw,
             })
         })
-        //.then((response) => response.json())
+        .then((response) => response.text())
         .then((data) => {
             /*if(data.id){
                 //login success Let's get token

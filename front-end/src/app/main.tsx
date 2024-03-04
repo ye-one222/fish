@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import '../tailwind.css';
 import { Link } from 'react-router-dom';
 //import { Link } from 'react-router-dom';
@@ -72,6 +72,7 @@ export const MainPage:React.FC=()=>{
     function handleLogOutBtn() {
         setUserID(null);
     }
+    
 
     return (<div className='MainPageCSS'>
         <div className='flex flex-row items-end'>

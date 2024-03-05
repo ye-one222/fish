@@ -10,6 +10,7 @@ import com.fisherman.fish.repository.GmoolRepository;
 import com.fisherman.fish.repository.MemberRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -25,9 +26,11 @@ public class GmoolService {
     private final FileRepository fileRepository;
     private final MemberRepository memberRepository;
 
-    private static String fileSavePath = "";
+    @Value("${gmool.file-save-path}")
+    private String fileSavePath;
     private static int gmoolCount = 0; // test
     private static int pinNumber = 0;
+
     public static int generatePinNumber() {
         // TODO : 핀번호 관리
         // 랜덤으로 생성
@@ -35,6 +38,19 @@ public class GmoolService {
         // 해당 번호가 찬 경우 : 1, 2, 4, 8, ... 순으로 커지도록?
         // -> 근데 이러면 자기 번호에서 1을 더하면 바로 다른 사람 께 보이니까 비효율적이지 않나??
         return pinNumber++;
+    }
+
+    public String createStoreFilename(String originalFilename){
+        // 저장할 고유한 파일명 생성
+        // - 그물 총 개수를 파일명 앞에 추가
+        String storeFilename = gmoolCount + originalFilename;
+        return storeFilename;
+    }
+
+    public String getFinalPath(String storeFilename){
+        // 저장 경로 반환
+        String path = fileSavePath + storeFilename;
+        return path;
     }
 
     @Transactional
@@ -102,21 +118,22 @@ public class GmoolService {
         //  - 되는지 안되는지 확인하고, 안되면 예외처리 필요
         List<FileDTO> fileDTOs = gmoolDTO.getFileDTOList();
         for(FileDTO fd : fileDTOs) {
-            String fileName = gmoolCount + fd.getOriginalFileName();
+            String fileName = createStoreFilename(fd.getOriginalFileName());
             System.out.println("- File '" + fd.getOriginalFileName() + "'will be saved as '" + fileName + "'"); // test
             fd.setStoredFileName(fileName);
         }
         // 파일을 서버에 저장한다.
-        String fileName = "";
+        String filename = null, savePath = null; // exception 출력용
         try{
             for(FileDTO fd : fileDTOs){
-                fileName = fd.getOriginalFileName();
+                filename = fd.getOriginalFileName();
                 MultipartFile file = fd.getFile();
-                String savePath = GmoolService.fileSavePath + fileName;
+                savePath = getFinalPath(fd.getStoredFileName());
                 file.transferTo(new File(savePath));
+                System.out.println("'" + filename + "' saved in '" + savePath + "'");
             }
         } catch(Exception e){
-            System.out.println("- EXCEPTION: Exception occurred while saving '" + fileName + "'"); // test
+            System.out.println("- EXCEPTION: Exception occurred while saving '" + filename + "'"); // test
             e.printStackTrace();
         }
         
@@ -156,6 +173,7 @@ public class GmoolService {
         }
         System.out.println("GmoolService: gmool saved. (id: " + savedEntity.getId() + ", pinNumber: " + savedEntity.getPinNumber());
         // 저장된 그물 dto를 반환한다.
+        gmoolCount++;
         return GmoolDTO.toGmoolDTO(savedEntity);
     }
 

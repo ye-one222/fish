@@ -6,8 +6,16 @@ import com.fisherman.fish.dto.GmoolReceiveDTO;
 import com.fisherman.fish.service.GmoolService;
 import com.fisherman.fish.service.MemberService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriUtils;
 
+import java.net.MalformedURLException;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -76,21 +84,37 @@ public class GmoolController {
     }
 
     @GetMapping("/{gid}/files/{filename}")
-    public Object getFile(@PathVariable(name="gid") Long gid, @PathVariable(name="filename") String filename){
-        // TOOD : 비밀번호 맞춰야 함
+    public ResponseEntity<Resource> getFile(@PathVariable(name="gid") Long gid, @PathVariable(name="filename") String filename)
+            throws MalformedURLException {
+        // TODO : 비밀번호 맞춰야 함
+        // TODO : Service로 로직 옮기기
         // 해당 그물의 해당 파일 반환
         // 그물 검색
         GmoolDTO gmoolDTO = gmoolService.findById(gid);
-        if(gmoolDTO == null) return "gmool is not found!";
+        if(gmoolDTO == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND); // TODO : message 포함?
+
+
         // 파일 반환
         List<FileDTO> files = gmoolDTO.getFileDTOList();
-        if(files == null) return "no files for you!";
+        if(files == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        FileDTO targetFileDTO = null;
         for(FileDTO f : files){
-            if(f.getOriginalFileName().equals(filename)) return f;
+            // 선형탐색 (시간 나면 다른 걸로 바꾸기)
+            if(f.getOriginalFileName().equals(filename)) {
+                targetFileDTO = f;
+                break;
+            }
         }
-        return "gmool exists but not " + filename + "!";
+        if(targetFileDTO == null) {
+            // 파일 없을 시 NOT FOUND
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        String filePath = gmoolService.getFinalPath(targetFileDTO.getStoredFileName());
+        UrlResource urlResource = new UrlResource("file:///" + filePath);
+        String encode = UriUtils.encode(targetFileDTO.getOriginalFileName(), StandardCharsets.UTF_8); // 사용자에게 보여질 파일명
+        String contentDisposition = "attachment; filename=\"" + encode + "\"";
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, contentDisposition)
+                .body(urlResource);
     }
-
-
-
 }

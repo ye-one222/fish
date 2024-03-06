@@ -42,7 +42,6 @@ export const LoginPage:React.FC=()=>{
                 localStorage.setItem("fish-login-token",data.Authorization);
                 })
                 setIsLogin(true);
-                alert(`Hi ${id}`);
                 navigate(-1);
             }
             else {

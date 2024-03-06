@@ -95,7 +95,7 @@ export const UploadPage:React.FC<UploadProps> = ( {file} )=>{
     const [ fileList, setFileList ] = useState<File[]>([]); //main에서 넘어온 파일정보는 배열에 추가 안함 -> 수정 필요
     const fileCnt = useRef(1);
     const durations = [30, 60, 120, 240, 360, 720]; //분 기준 / 나중에 1시간->60분으로 변환하는 함수 만들면 더 좋을듯
-    const dataTransfer = new DataTransfer();
+    const [ active, setActive ] = useState(false);
   
     const handleButtonClick = e => {
         if (fileInput.current) {
@@ -108,7 +108,6 @@ export const UploadPage:React.FC<UploadProps> = ( {file} )=>{
             const filesArray: File[] = Array.from(e.target.files); // 새로운 파일 목록을 배열로 변환
             return [...prevFileList, ...filesArray]; // 이전 파일 목록과 새로운 파일들을 합친 새로운 배열 반환
         });
-        //dataTransfer.items.add(set)
         fileCnt.current++;
         console.log(fileList);
     }
@@ -116,6 +115,24 @@ export const UploadPage:React.FC<UploadProps> = ( {file} )=>{
     const handleDelete = ( name ) => {
         setFileList(fileList.filter(file => file.name !== name));
         fileCnt.current--;
+    }
+
+    const onDropFiles = (e) => {
+        console.log({ e }, e.dataTransfer.files);
+        e.preventDefault();
+        setActive(false);
+
+        setFileList(prevFileList => {
+            const filesArray: File[] = Array.from(e.dataTransfer.files);
+            return [...prevFileList, ...filesArray];
+        });
+        fileCnt.current++;
+    };
+
+    const handleDragOn = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setActive(true);
     }
 
     return (
@@ -128,7 +145,11 @@ export const UploadPage:React.FC<UploadProps> = ( {file} )=>{
             <form action="http://localhost:8080/gmool" method="post" encType="multipart/form-data" className="flex flex-row w-full h-full justify-center gap-20">
                 {/* 왼쪽 박스 */}
                 <div className="flex flex-col items-center h-2/3 w-1/3 max-w-[521px] max-h-[592px] mt-10 p-6 bg-[#e7fafc] rounded-[50px] gap-5">
-                    <div className="w-full h-3/4 flex flex-col items-center bg-[#f7fdff] rounded-[50px] border-2 border-dashed border-[#27416d]">
+                    <div className={`w-full h-3/4 flex flex-col items-center bg-[#f7fdff] rounded-[50px] border-2 border-dashed ${active?"border-[#27416D]":"border-[#879DB4]"}`}
+                        onDragEnter={ handleDragOn }
+                        onDragOver={ handleDragOn }
+                        onDrop={ onDropFiles }
+                        >
                         <div className="w-full p-5 overflow-y-auto">
                             {/* 파일들 - 일단 최소한 1개는 고정으로 있음(main에서 넘어온거) */}
                             <UploadedFile name={firstFileName}/>

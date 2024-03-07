@@ -1,6 +1,7 @@
-package com.fisherman.fish.jwt;
+package com.fisherman.fish.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fisherman.fish.utility.JWTUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -68,6 +69,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication){
+        // 로그인 성공
         System.out.println("Attempt successful.");
         User user = (User) authentication.getPrincipal();
 
@@ -92,6 +94,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed){
+        // 로그인 실패
         System.out.println("Attempt failed.");
         response.setStatus(401);
     }

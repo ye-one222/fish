@@ -8,9 +8,9 @@ import com.fisherman.fish.entity.MemberEntity;
 import com.fisherman.fish.repository.FileRepository;
 import com.fisherman.fish.repository.GmoolRepository;
 import com.fisherman.fish.repository.MemberRepository;
+import com.fisherman.fish.utility.FileUtil;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -26,8 +26,7 @@ public class GmoolService {
     private final FileRepository fileRepository;
     private final MemberRepository memberRepository;
 
-    @Value("${gmool.file-save-path}")
-    private String fileSavePath;
+
     private static int gmoolCount = 0; // test
     private static int pinNumber = 0;
 
@@ -37,20 +36,8 @@ public class GmoolService {
         // 현재 사용 중인 pin번호 : hashmap에 관리?
         // 해당 번호가 찬 경우 : 1, 2, 4, 8, ... 순으로 커지도록?
         // -> 근데 이러면 자기 번호에서 1을 더하면 바로 다른 사람 께 보이니까 비효율적이지 않나??
+
         return pinNumber++;
-    }
-
-    public String createStoreFilename(String originalFilename){
-        // 저장할 고유한 파일명 생성
-        // - 그물 총 개수를 파일명 앞에 추가
-        String storeFilename = gmoolCount + originalFilename;
-        return storeFilename;
-    }
-
-    public String getFinalPath(String storeFilename){
-        // 저장 경로 반환
-        String path = fileSavePath + storeFilename;
-        return path;
     }
 
     @Transactional
@@ -103,6 +90,8 @@ public class GmoolService {
         //  전부 묶어서 반환
         // 해당 그물 저장
 
+        // TODO: 로그인된 경우 유저 id도 저장
+
         System.out.println("GmoolService: [save() called]"); // test
         // 1. pin 번호 생성
         int pinNumber = GmoolService.generatePinNumber();
@@ -116,19 +105,19 @@ public class GmoolService {
         // TODO: 경로는 다르지만 파일명이 같은 경우 처리
         //  - 이거 프론트 상에서 알아서 걸러지나?  filename(1) filename(2) 이런 식으로?
         //  - 되는지 안되는지 확인하고, 안되면 예외처리 필요
-        List<FileDTO> fileDTOs = gmoolDTO.getFileDTOList();
-        for(FileDTO fd : fileDTOs) {
-            String fileName = createStoreFilename(fd.getOriginalFileName());
+        List<FileDTO> fileDTOS = gmoolDTO.getFileDTOList();
+        for(FileDTO fd : fileDTOS) {
+            String fileName = FileUtil.createStoreFilename(fd.getOriginalFileName(), String.valueOf(gmoolCount));
             System.out.println("- File '" + fd.getOriginalFileName() + "'will be saved as '" + fileName + "'"); // test
             fd.setStoredFileName(fileName);
         }
         // 파일을 서버에 저장한다.
         String filename = null, savePath = null; // exception 출력용
         try{
-            for(FileDTO fd : fileDTOs){
+            for(FileDTO fd : fileDTOS){
                 filename = fd.getOriginalFileName();
                 MultipartFile file = fd.getFile();
-                savePath = getFinalPath(fd.getStoredFileName());
+                savePath = FileUtil.getFinalPath(fd.getStoredFileName());
                 file.transferTo(new File(savePath));
                 System.out.println("'" + filename + "' saved in '" + savePath + "'");
             }
@@ -151,7 +140,7 @@ public class GmoolService {
         }
         // - 파일 Entity를 생성한다
         List<FileEntity> fileEntities = new ArrayList<>();
-        for(FileDTO fd : fileDTOs){
+        for(FileDTO fd : fileDTOS){
             fileEntities.add(new FileEntity(
                     fd.getStoredFileName(),
                     fd.getOriginalFileName(),

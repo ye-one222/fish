@@ -5,6 +5,7 @@ import com.fisherman.fish.dto.GmoolDTO;
 import com.fisherman.fish.dto.GmoolReceiveDTO;
 import com.fisherman.fish.service.GmoolService;
 import com.fisherman.fish.service.MemberService;
+import com.fisherman.fish.utility.FileUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -53,8 +54,6 @@ public class GmoolController {
             System.out.println("- WARNING: due minute is not set; it would be set to default (" + defaultTime + ")");
             gmoolReceiveDTO.setDueMinute(defaultTime);
         }
-        // TODO : 그물 생성시각 할당 (완)
-        // TODO : 파일 개수 할당 (완)
         GmoolDTO gmoolDTO = new GmoolDTO(gmoolReceiveDTO); // 첨부파일을 fileDTO로 만듬
         GmoolDTO savedDTO = gmoolService.save(gmoolDTO);
         System.out.println("GmoolController: saved gmool.");
@@ -109,7 +108,7 @@ public class GmoolController {
             // 파일 없을 시 NOT FOUND
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        String filePath = gmoolService.getFinalPath(targetFileDTO.getStoredFileName());
+        String filePath = FileUtil.getFinalPath(targetFileDTO.getStoredFileName());
         UrlResource urlResource = new UrlResource("file:///" + filePath);
         String encode = UriUtils.encode(targetFileDTO.getOriginalFileName(), StandardCharsets.UTF_8); // 사용자에게 보여질 파일명
         String contentDisposition = "attachment; filename=\"" + encode + "\"";

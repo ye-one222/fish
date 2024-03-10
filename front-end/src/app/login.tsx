@@ -1,10 +1,13 @@
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useEffect, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import { BackToMain } from '../interface/back.tsx'
 
 export const LoginPage:React.FC=()=>{
     const [ id, setId ] = useState<string|null>(null);
     const [ pw, setPw ] = useState<string|null>(null);
+    const [ isValid, setIsValid ] = useState<boolean>(false);
+    const [ isLogin, setIsLogin ] = useState<boolean>(false);
+    const navigate = useNavigate();
 
     const handleIDInput = (e) => {
         setId(e.target.value);
@@ -12,6 +15,14 @@ export const LoginPage:React.FC=()=>{
     const handlePwInput = (e) => {
         setPw(e.target.value);
     }
+
+    useEffect(() => {
+        if(id!==null && pw!== null) {
+            setIsValid(true);
+        }else {
+            setIsValid(false);
+        }
+    }, [id, pw])
 
     const submitHandler = () => {
         fetch('http://localhost:8080/users/login', {
@@ -24,22 +35,20 @@ export const LoginPage:React.FC=()=>{
                 password: pw,
             })
         })
-        //.then((response) => response.json())
-        .then((data) => {
-            /*if(data.id){
-                //login success Let's get token
-                console.log(data.token)
-                //토큰 받아서 로컬 스트리지 or 세션 스토리지에 저장 + 로그아웃할때 취소
-                localStorage.setItem("login-token",data.token)
-                localStorage.setItem("user-id", data.id)
-                //setLoginFin(true)
+        .then((response) => {
+            if(response.status===200) {
+                response.json().then((data) => {
+                console.log(data);
+                localStorage.setItem("fish-login-token",data.Authorization);
+                })
+                setIsLogin(true);
+                navigate(-1);
             }
-            else{
-                alert(data.message);
-            }*/
-        });
+            else {
+                alert("잘못된 ID 또는 비밀번호를 입력하였습니다!");
+            }
+        })
     }
-
 
     return (
         <div className="bg-white h-full flex flex-col items-center justify-center">
@@ -69,6 +78,7 @@ export const LoginPage:React.FC=()=>{
 
                 <button
                     className="mt-10 [font-family:'Inter-Medium',Helvetica] font-medium text-[#27416d] text-[30px] text-center tracking-[0] leading-[normal] bg-[#E8FAFD] rounded-[50px] px-20 py-4"
+                    disabled={!isValid}
                     onClick={ submitHandler }
                 >
                     Log In

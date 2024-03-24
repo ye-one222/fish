@@ -1,4 +1,4 @@
-package com.fisherman.fish.jwt;
+package com.fisherman.fish.utility;
 
 import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Value;

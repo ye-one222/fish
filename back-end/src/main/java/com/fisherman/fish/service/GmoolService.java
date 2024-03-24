@@ -25,6 +25,8 @@ public class GmoolService {
     private final GmoolRepository gmoolRepository;
     private final FileRepository fileRepository;
     private final MemberRepository memberRepository;
+    private final FileUtil fileUtil;
+
 
 
     private static int gmoolCount = 0; // test
@@ -64,15 +66,6 @@ public class GmoolService {
         return gmoolDTOs;
     }
 
-
-    public MultipartFile getQRCode(GmoolDTO gmoolDTO){
-        return null;
-    }
-
-    public MultipartFile getQRCode(String url){
-        return null;
-    }
-
     /**
      * save():
      * 해당 그물을 저장한다.
@@ -107,7 +100,7 @@ public class GmoolService {
         //  - 되는지 안되는지 확인하고, 안되면 예외처리 필요
         List<FileDTO> fileDTOS = gmoolDTO.getFileDTOList();
         for(FileDTO fd : fileDTOS) {
-            String fileName = FileUtil.createStoreFilename(fd.getOriginalFileName(), String.valueOf(gmoolCount));
+            String fileName = fileUtil.createStoreFilename(fd.getOriginalFileName(), String.valueOf(gmoolCount));
             System.out.println("- File '" + fd.getOriginalFileName() + "'will be saved as '" + fileName + "'"); // test
             fd.setStoredFileName(fileName);
         }
@@ -117,7 +110,7 @@ public class GmoolService {
             for(FileDTO fd : fileDTOS){
                 filename = fd.getOriginalFileName();
                 MultipartFile file = fd.getFile();
-                savePath = FileUtil.getFinalPath(fd.getStoredFileName());
+                savePath = fileUtil.getFinalPath(fd.getStoredFileName());
                 file.transferTo(new File(savePath));
                 System.out.println("'" + filename + "' saved in '" + savePath + "'");
             }

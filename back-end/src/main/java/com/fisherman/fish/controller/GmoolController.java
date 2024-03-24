@@ -25,6 +25,7 @@ import java.util.List;
 public class GmoolController {
     private final GmoolService gmoolService;
     private final MemberService memberService;
+    private final FileUtil fileUtil;
 
     @GetMapping
     public Object getGmools(){
@@ -108,7 +109,7 @@ public class GmoolController {
             // 파일 없을 시 NOT FOUND
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        String filePath = FileUtil.getFinalPath(targetFileDTO.getStoredFileName());
+        String filePath = fileUtil.getFinalPath(targetFileDTO.getStoredFileName());
         UrlResource urlResource = new UrlResource("file:///" + filePath);
         String encode = UriUtils.encode(targetFileDTO.getOriginalFileName(), StandardCharsets.UTF_8); // 사용자에게 보여질 파일명
         String contentDisposition = "attachment; filename=\"" + encode + "\"";

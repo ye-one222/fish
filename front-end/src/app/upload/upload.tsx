@@ -96,6 +96,7 @@ export const UploadPage:React.FC<UploadProps> = ( {file} )=>{
     const fileCnt = useRef(1);
     const durations = [30, 60, 120, 240, 360, 720]; //분 기준 / 나중에 1시간->60분으로 변환하는 함수 만들면 더 좋을듯
     const [ active, setActive ] = useState(false);
+    const dataTransfer = new DataTransfer();
   
     const handleButtonClick = e => {
         if (fileInput.current) {
@@ -109,7 +110,16 @@ export const UploadPage:React.FC<UploadProps> = ( {file} )=>{
             return [...prevFileList, ...filesArray]; // 이전 파일 목록과 새로운 파일들을 합친 새로운 배열 반환
         });
         fileCnt.current++;
-        console.log(fileList);
+
+        for (let i=0; i<fileList.length; i++) {
+            dataTransfer.items.add(fileList[i]);
+        }
+
+        const files = e.target.files;
+        for (let i = 0; i < files.length; i++) {
+            dataTransfer.items.add(files[i]);
+        }
+        console.log(dataTransfer);
     }
 
     const handleDelete = ( name ) => {
@@ -118,7 +128,7 @@ export const UploadPage:React.FC<UploadProps> = ( {file} )=>{
     }
 
     const onDropFiles = (e) => {
-        console.log({ e }, e.dataTransfer.files);
+        //console.log({ e }, e.dataTransfer.files);
         e.preventDefault();
         setActive(false);
 
@@ -127,6 +137,16 @@ export const UploadPage:React.FC<UploadProps> = ( {file} )=>{
             return [...prevFileList, ...filesArray];
         });
         fileCnt.current++;
+
+        for (let i=0; i<fileList.length; i++) {
+            dataTransfer.items.add(fileList[i]);
+        }
+
+        const files = e.dataTransfer.files;
+        for (let i = 0; i < files.length; i++) {
+            dataTransfer.items.add(files[i]);
+        }
+        console.log(dataTransfer);
     };
 
     const handleDragOn = (e) => {
@@ -186,7 +206,7 @@ export const UploadPage:React.FC<UploadProps> = ( {file} )=>{
                         name="files"
                         className='hidden'
                         ref={fileInput}
-                        onChange={handleChange}/>       
+                        onChange={handleChange}/>      
                 </div>
 
                 {/* 오른쪽 박스 */}

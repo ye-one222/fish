@@ -5,8 +5,10 @@ import com.fisherman.fish.dto.MemberRequestDTO;
 import com.fisherman.fish.dto.MemberResponseDTO;
 import com.fisherman.fish.service.GmoolService;
 import com.fisherman.fish.service.MemberService;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -26,7 +28,7 @@ public class MemberController {
     @GetMapping
     public List<MemberResponseDTO> getAllUsers(){
         // 모든 user 반환
-        List<MemberResponseDTO> members = memberService.getAllMembers();
+        List<MemberResponseDTO> members = memberService.findAll();
         return members;
     }
 
@@ -40,45 +42,48 @@ public class MemberController {
     }
 
     @PostMapping("/signup")
-    public Object signup(@RequestBody MemberRequestDTO signupRequestDTO){
+    public Object signup(@RequestBody MemberRequestDTO signupRequestDTO) {
         // 받은 정보로 회원가입
         // TODO : 아이디 예외처리 (금지단어, 정규식 처리 등)
         System.out.println("sign up request by " + signupRequestDTO.toString());
+        MemberResponseDTO signupResponseDTO;
         try {
-            memberService.save(signupRequestDTO);
-        } catch(DataIntegrityViolationException e){
+            signupResponseDTO = memberService.save(signupRequestDTO);
+            if (signupResponseDTO == null)
+                throw new DataIntegrityViolationException("User already exists");
+        } catch (DataIntegrityViolationException e) {
             // ID가 중복인 경우
             e.printStackTrace(); // test
             return "이미 존재하는 ID입니다";
-        } catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace(); // test
             return "회원가입 실패";
         }
-        return signupRequestDTO;
+        return signupResponseDTO;
     }
 
     @GetMapping("/{id}")
-    public String getUserById(@PathVariable(name="id") String id){
+    public ResponseEntity<MemberResponseDTO> getUserById(@PathVariable(name="id") String id){
         // 해당 user의 정보 반환
-        MemberResponseDTO member = memberService.searchById(id);
-        if(member == null) return "no";
-        return "yes";
+        MemberResponseDTO member = memberService.findById(id);
+        if(member == null) return ResponseEntity.notFound().build();
+        return ResponseEntity.ok().body(member);
     }
 
     @DeleteMapping("/{id}")
     public String deleteUser(@PathVariable(name="id") String id){
-        // 해당 회원 삭제
-        return "yes";
+        // TODO
+        return "구현 예정";
     }
 
-
-
     @GetMapping("/{id}/gmools")
-    public String getUserGmool(@PathVariable(name="id") String id){
-        // 해당 유저의 그물들 반환
-        MemberResponseDTO memberDTO = memberService.searchById(id);
-        if(memberDTO == null) return "no";
-        List<GmoolDTO> gmools = gmoolService.findByUserId(memberDTO.getId());
-        return "gmool of " + id;
+    public ResponseEntity<List<GmoolDTO>> getUserGmool(@PathVariable(name="id") String id){
+        // 해당 유저의 그물
+        List<GmoolDTO> gmools = gmoolService.findByUserId(id);
+        if(gmools == null){
+            // 회원 id가 존재하지 않는 경우
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok().body(gmools);
     }
 }

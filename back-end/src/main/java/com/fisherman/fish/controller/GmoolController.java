@@ -38,6 +38,7 @@ public class GmoolController {
     
     @PostMapping
     public GmoolDTO createGmool(@ModelAttribute("gmool") GmoolReceiveDTO gmoolReceiveDTO){
+        // TODO: 로그인 했을 시 유저 정보 기록
         System.out.println("GmoolController: [POST at '/gmool'] "); // test
         // 예외처리 : DTO 없이 POST 요청 보낸 경우
         if(gmoolReceiveDTO == null){

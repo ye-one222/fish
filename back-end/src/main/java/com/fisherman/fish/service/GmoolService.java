@@ -53,16 +53,14 @@ public class GmoolService {
     }
 
     public List<GmoolDTO> findByUserId(String uid){
-        // TODO : uid 예외처리?
         // 해당 user가 게시한 모든 그물 반환
         Optional<List<GmoolEntity>> optionalGmoolEntities = gmoolRepository.findByGmoolOwner_id(uid);
         if(optionalGmoolEntities.isEmpty()) return null;  // 게시한 그물이 존재하지 않는 경우 null 반환 (그물 게시 X or user 존재 X)
         // DTO로 변환하여 반환
         List<GmoolEntity> gmoolEntities = optionalGmoolEntities.get();
         List<GmoolDTO> gmoolDTOs = new ArrayList<>();
-        for(GmoolEntity ge : gmoolEntities){
+        for(GmoolEntity ge : gmoolEntities)
             gmoolDTOs.add(GmoolDTO.toGmoolDTO(ge));
-        }
         return gmoolDTOs;
     }
 

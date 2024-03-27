@@ -1,14 +1,11 @@
 package com.fisherman.fish.dto;
 
-import com.fisherman.fish.entity.FileEntity;
-import com.fisherman.fish.entity.GmoolEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +13,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @ToString
-public class GmoolReceiveDTO extends GmoolDTO{
+public class FishRequestDTO extends FishDTO {
     private List<MultipartFile> files = null;
 
     public List<FileDTO> convertFilesToFileDTOList(){

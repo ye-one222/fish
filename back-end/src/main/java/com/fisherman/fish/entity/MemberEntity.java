@@ -13,7 +13,7 @@ import java.util.List;
 
 @Entity
 @Getter
-@NoArgsConstructor // 임시 (No default constructor for entity 'GmoolEntity')
+@NoArgsConstructor // 임시 (No default constructor for entity 'FishEntity')
 @Setter // 임시
 @AllArgsConstructor
 @Table(name = "member")
@@ -33,14 +33,14 @@ public class MemberEntity {
     //@OneToMany(mappedBy = "memberEntity", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
     //private List<UploadEntity> uploadEntityList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "gmoolOwner", cascade = CascadeType.REMOVE, orphanRemoval = true)
-    private List<GmoolEntity> uploadedGmools;
+    @OneToMany(mappedBy = "fishOwner", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<FishEntity> uploadedFish;
 
     @Column
     private String role;
 
-    public void addUploadedGmools(GmoolEntity gmoolEntity){
-        uploadedGmools.add(gmoolEntity);
+    public void addUploadedFish(FishEntity fishEntity){
+        uploadedFish.add(fishEntity);
     }
 
     public static MemberEntity toMemberEntity(MemberRequestDTO memberDTO){

@@ -24,12 +24,8 @@ public class FileEntity {
     private long fileSize;
 
     @ManyToOne
-    @JoinColumn(name = "gmool_id")
-    private GmoolEntity gmoolEntity;
-
-    public void setGmoolEntity(GmoolEntity gmoolEntity){
-        this.gmoolEntity = gmoolEntity;
-    }
+    @JoinColumn(name = "fish_id")
+    private FishEntity fishEntity;
 
     public static FileEntity toFileEntity(FileDTO fileDTO){
         return new FileEntity(
@@ -39,12 +35,12 @@ public class FileEntity {
                 null);
     }
 
-    public static FileEntity toFileEntity(FileDTO fileDTO, GmoolEntity gmoolEntity){
-        // TODO: gmoolEntity 처리
+    public static FileEntity toFileEntity(FileDTO fileDTO, FishEntity fishEntity){
+        // TODO: fishEntity 처리
         return new FileEntity(
                 fileDTO.getStoredFileName(),
                 fileDTO.getOriginalFileName(),
                 fileDTO.getFileSize(),
-                gmoolEntity);
+                fishEntity);
     }
 }

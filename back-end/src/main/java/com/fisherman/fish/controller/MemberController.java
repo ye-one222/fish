@@ -1,11 +1,10 @@
 package com.fisherman.fish.controller;
 
-import com.fisherman.fish.dto.GmoolDTO;
+import com.fisherman.fish.dto.FishDTO;
 import com.fisherman.fish.dto.MemberRequestDTO;
 import com.fisherman.fish.dto.MemberResponseDTO;
-import com.fisherman.fish.service.GmoolService;
+import com.fisherman.fish.service.FishService;
 import com.fisherman.fish.service.MemberService;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +21,7 @@ import java.util.List;
 @RequestMapping("/users")
 public class MemberController {
     private final MemberService memberService;
-    private final GmoolService gmoolService;
+    private final FishService fishService;
     private final AuthenticationManager authenticationManager;
 
     @GetMapping
@@ -48,7 +47,7 @@ public class MemberController {
         System.out.println("sign up request by " + signupRequestDTO.toString());
         MemberResponseDTO signupResponseDTO;
         try {
-            signupResponseDTO = memberService.save(signupRequestDTO);
+            signupResponseDTO = memberService.save(signupRequestDTO); // TODO: 존재하는 ID 예외처리 필요 (아래 코드로 부족함)
             if (signupResponseDTO == null)
                 throw new DataIntegrityViolationException("User already exists");
         } catch (DataIntegrityViolationException e) {
@@ -76,14 +75,14 @@ public class MemberController {
         return "구현 예정";
     }
 
-    @GetMapping("/{id}/gmools")
-    public ResponseEntity<List<GmoolDTO>> getUserGmool(@PathVariable(name="id") String id){
-        // 해당 유저의 그물
-        List<GmoolDTO> gmools = gmoolService.findByUserId(id);
-        if(gmools == null){
+    @GetMapping("/{id}/fishes")
+    public ResponseEntity<List<FishDTO>> getUserGmool(@PathVariable(name="id") String id){
+        // 해당 유저의 FISH
+        List<FishDTO> fishes = fishService.findByUserId(id);
+        if(fishes == null){
             // 회원 id가 존재하지 않는 경우
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok().body(gmools);
+        return ResponseEntity.ok().body(fishes);
     }
 }

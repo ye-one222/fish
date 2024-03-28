@@ -14,9 +14,11 @@ import java.util.List;
 @NoArgsConstructor
 @ToString
 public class FishRequestDTO extends FishDTO {
+    // FishDTO에 파일을 담는 files객체 포함
     private List<MultipartFile> files = null;
 
     public List<FileDTO> convertFilesToFileDTOList(){
+        // 파일을 FileDTO 리스트로 변환하여 반환
         if(fileDTOList == null) fileDTOList = new ArrayList<>();
         for(MultipartFile f : files){
             FileDTO fd = new FileDTO(f.getOriginalFilename(), null, f, f.getSize());

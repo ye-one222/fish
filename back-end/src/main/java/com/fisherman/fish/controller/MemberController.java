@@ -47,7 +47,7 @@ public class MemberController {
         System.out.println("sign up request by " + signupRequestDTO.toString());
         MemberResponseDTO signupResponseDTO;
         try {
-            signupResponseDTO = memberService.save(signupRequestDTO);
+            signupResponseDTO = memberService.save(signupRequestDTO); // TODO: 존재하는 ID 예외처리 필요 (아래 코드로 부족함)
             if (signupResponseDTO == null)
                 throw new DataIntegrityViolationException("User already exists");
         } catch (DataIntegrityViolationException e) {
@@ -75,7 +75,7 @@ public class MemberController {
         return "구현 예정";
     }
 
-    @GetMapping("/{id}/gmools")
+    @GetMapping("/{id}/fishes")
     public ResponseEntity<List<FishDTO>> getUserGmool(@PathVariable(name="id") String id){
         // 해당 유저의 FISH
         List<FishDTO> fishes = fishService.findByUserId(id);

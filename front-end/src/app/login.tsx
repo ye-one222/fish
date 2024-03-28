@@ -38,11 +38,11 @@ export const LoginPage:React.FC=()=>{
         .then((response) => {
             if(response.status===200) {
                 response.json().then((data) => {
-                console.log(data);
-                localStorage.setItem("fish-login-token",data.Authorization);
+                    console.log(data);
+                    localStorage.setItem("fish-login-token",data.Authorization);
                 })
                 setIsLogin(true);
-                navigate(-1);
+                navigate('/');
             }
             else {
                 alert("잘못된 ID 또는 비밀번호를 입력하였습니다!");

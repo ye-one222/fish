@@ -162,7 +162,7 @@ export const UploadPage:React.FC<UploadProps> = ( {file} )=>{
                 새로운 FISH 만들기
             </div>
             
-            <form action="http://localhost:8080/gmool" method="post" encType="multipart/form-data" className="flex flex-row w-full h-full justify-center gap-20">
+            <form action="http://localhost:8080/fishes" method="post" encType="multipart/form-data" className="flex flex-row w-full h-full justify-center gap-20">
                 {/* 왼쪽 박스 */}
                 <div className="flex flex-col items-center h-2/3 w-1/3 max-w-[521px] max-h-[592px] mt-10 p-6 bg-[#e7fafc] rounded-[50px] gap-5">
                     <div className={`w-full h-3/4 flex flex-col items-center bg-[#f7fdff] rounded-[50px] border-2 border-dashed ${active?"border-[#27416D]":"border-[#879DB4]"}`}

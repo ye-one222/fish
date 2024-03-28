@@ -9,8 +9,12 @@ public class FileUtil {
     private String fileSavePath;
 
     public String createStoreFilename(String originalFilename, String prefix){
-        // 저장할 고유한 파일명 생성
+        // TODO: 파일명 앞에 prefix 어떻게 할지
         // - 그물 총 개수를 파일명 앞에 추가
+
+        // 일단, 현재시간 밀리초를 파일명 앞에 붙인다
+        prefix = String.valueOf(System.currentTimeMillis()); //test
+        
         String storeFilename = prefix + originalFilename;
         return storeFilename;
     }

@@ -1,6 +1,5 @@
 package com.fisherman.fish.service;
 
-import com.fisherman.fish.dto.GmoolDTO;
 import com.fisherman.fish.dto.MemberRequestDTO;
 import com.fisherman.fish.dto.MemberResponseDTO;
 import com.fisherman.fish.entity.MemberEntity;

@@ -2,10 +2,7 @@ package com.fisherman.fish.entity;
 
 import com.fisherman.fish.dto.FileDTO;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Getter
@@ -13,6 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor // 임시
 @Table(name = "file")
 @AllArgsConstructor
+@ToString
 public class FileEntity {
     @Id
     private String storedFileName;
@@ -24,12 +22,8 @@ public class FileEntity {
     private long fileSize;
 
     @ManyToOne
-    @JoinColumn(name = "gmool_id")
-    private GmoolEntity gmoolEntity;
-
-    public void setGmoolEntity(GmoolEntity gmoolEntity){
-        this.gmoolEntity = gmoolEntity;
-    }
+    @JoinColumn(name = "fish_id")
+    private FishEntity fishEntity;
 
     public static FileEntity toFileEntity(FileDTO fileDTO){
         return new FileEntity(
@@ -39,12 +33,12 @@ public class FileEntity {
                 null);
     }
 
-    public static FileEntity toFileEntity(FileDTO fileDTO, GmoolEntity gmoolEntity){
-        // TODO: gmoolEntity 처리
+    public static FileEntity toFileEntity(FileDTO fileDTO, FishEntity fishEntity){
+        // TODO: fishEntity 처리
         return new FileEntity(
                 fileDTO.getStoredFileName(),
                 fileDTO.getOriginalFileName(),
                 fileDTO.getFileSize(),
-                gmoolEntity);
+                fishEntity);
     }
 }

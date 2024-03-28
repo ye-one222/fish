@@ -1,9 +1,9 @@
 package com.fisherman.fish.controller;
 
 import com.fisherman.fish.dto.FileDTO;
-import com.fisherman.fish.dto.GmoolDTO;
-import com.fisherman.fish.dto.GmoolReceiveDTO;
-import com.fisherman.fish.service.GmoolService;
+import com.fisherman.fish.dto.FishDTO;
+import com.fisherman.fish.dto.FishRequestDTO;
+import com.fisherman.fish.service.FishService;
 import com.fisherman.fish.service.MemberService;
 import com.fisherman.fish.utility.FileUtil;
 import lombok.RequiredArgsConstructor;
@@ -21,53 +21,54 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/gmool")
-public class GmoolController {
-    private final GmoolService gmoolService;
+@RequestMapping("/fishes")
+public class FishController {
+    private final FishService fishService;
     private final MemberService memberService;
     private final FileUtil fileUtil;
 
     @GetMapping
-    public Object getGmools(){
+    public Object getFishes(){
         // 모든 그물 반환
         // TODO: 그물dto 반환 시 password는 주면 안된다!
         // TODO: admin 권한 있는 경우만 보내주기
-        List<GmoolDTO> gmools = gmoolService.findAll();
-        return gmools;
+        List<FishDTO> fishes = fishService.findAll();
+        return fishes;
     }
     
     @PostMapping
-    public GmoolDTO createGmool(@ModelAttribute("gmool") GmoolReceiveDTO gmoolReceiveDTO){
-        System.out.println("GmoolController: [POST at '/gmool'] "); // test
+    public FishDTO createFish(@ModelAttribute FishRequestDTO fishRequestDTO){
+        // TODO: 로그인 했을 시 유저 정보 기록
+        System.out.println("FishController: [POST at '/gmool'] "); // test
         // 예외처리 : DTO 없이 POST 요청 보낸 경우
-        if(gmoolReceiveDTO == null){
-            System.out.println("- EXCEPTION: gmoolDTO is null"); // test
+        if(fishRequestDTO == null){
+            System.out.println("- EXCEPTION: fishDTO is null"); // test
             return null;
         }
         // 예외처리 : 파일이 비어있는 경우
-        if(gmoolReceiveDTO.getFiles() == null){
+        if(fishRequestDTO.getFiles() == null){
             System.out.println("- EXCEPTION: no files are included"); // test
             return null;
         }
         // 예외처리 : 유효기간이 설정되어있지 않은 경우, 기본값(10분)으로 설정 TODO: 미설정시 기본값 0 맞는지 테스트 필요
-        if(gmoolReceiveDTO.getDueMinute() == 0){
+        if(fishRequestDTO.getDueMinute() == 0){
             int defaultTime = 10;
             System.out.println("- WARNING: due minute is not set; it would be set to default (" + defaultTime + ")");
-            gmoolReceiveDTO.setDueMinute(defaultTime);
+            fishRequestDTO.setDueMinute(defaultTime);
         }
-        GmoolDTO gmoolDTO = new GmoolDTO(gmoolReceiveDTO); // 첨부파일을 fileDTO로 만듬
-        GmoolDTO savedDTO = gmoolService.save(gmoolDTO);
-        System.out.println("GmoolController: saved gmool.");
+        FishDTO fishDTO = new FishDTO(fishRequestDTO); // 첨부파일을 fileDTO로 만듬
+        FishDTO savedDTO = fishService.save(fishDTO);
+        System.out.println("FishController: saved gmool.");
         return savedDTO;
     }
 
     @GetMapping("/{gid}")
-    public Object getGmool(@PathVariable(name="gid") Long gid){
+    public Object getFish(@PathVariable(name="gid") Long gid){
         // TODO : 비밀번호 맞춰야 함
         // 해당 그물 반환
-        GmoolDTO gmool = gmoolService.findById(gid);
-        if(gmool == null) return "no gmool for you!";
-        return gmool;
+        FishDTO fish = fishService.findById(gid);
+        if(fish == null) return "no fish for you!";
+        return fish;
     }
 
     @GetMapping("/{gid}/files")
@@ -75,10 +76,10 @@ public class GmoolController {
         // TODO : 비밀번호 맞춰야 함
         // 해당 그물의 파일 모두 반환
         // 그물 검색
-        GmoolDTO gmoolDTO = gmoolService.findById(gid);
-        if(gmoolDTO == null) return "gmool is not found!";
+        FishDTO fishDTO = fishService.findById(gid);
+        if(fishDTO == null) return "gmool is not found!";
         // 파일 반환
-        List<FileDTO> files = gmoolDTO.getFileDTOList();
+        List<FileDTO> files = fishDTO.getFileDTOList();
         if(files == null) return "no files for you!";
         return files;
     }
@@ -90,12 +91,12 @@ public class GmoolController {
         // TODO : Service로 로직 옮기기
         // 해당 그물의 해당 파일 반환
         // 그물 검색
-        GmoolDTO gmoolDTO = gmoolService.findById(gid);
-        if(gmoolDTO == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND); // TODO : message 포함?
+        FishDTO fishDTO = fishService.findById(gid);
+        if(fishDTO == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND); // TODO : message 포함?
 
 
         // 파일 반환
-        List<FileDTO> files = gmoolDTO.getFileDTOList();
+        List<FileDTO> files = fishDTO.getFileDTOList();
         if(files == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         FileDTO targetFileDTO = null;
         for(FileDTO f : files){

@@ -1,5 +1,6 @@
 package com.fisherman.fish.config;
 
+import com.fisherman.fish.filter.FishFilter;
 import com.fisherman.fish.utility.JWTUtil;
 import com.fisherman.fish.filter.LoginFilter;
 import jakarta.servlet.http.HttpSession;
@@ -30,6 +31,7 @@ public class SecurityConfig {
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         LoginFilter loginFilter = new LoginFilter(authenticationManager(configuration), jwtUtil);
         loginFilter.setFilterProcessesUrl("/users/login");
+        FishFilter fishFilter = new FishFilter();
         http
                 .authorizeHttpRequests((authorizedHttpRequests) -> authorizedHttpRequests
                         .requestMatchers("/h2-console/**").permitAll() // h2 콘솔 허용
@@ -48,6 +50,7 @@ public class SecurityConfig {
                 .httpBasic((auth) -> auth.disable())
                 // 로그인 필터 등록 (UsernamePasswordAuthenticationFilter 위치에)
                 .addFilterAt(loginFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterAt(fishFilter, UsernamePasswordAuthenticationFilter.class)
                 .sessionManagement((session) -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 세선 정책 설정 (rest api에 필요)
                 .headers((headers) -> headers

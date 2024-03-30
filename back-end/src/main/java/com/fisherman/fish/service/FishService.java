@@ -34,7 +34,7 @@ public class FishService {
     private static int fishCount = 0; // test
     private static int pinNumber = 0;
 
-    //@PostConstruct
+    @PostConstruct
     @Transactional
     public void init(){
         // pinMap 초기화

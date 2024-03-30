@@ -1,6 +1,6 @@
 package com.fisherman.fish.entity;
 
-import com.fisherman.fish.dto.GmoolDTO;
+import com.fisherman.fish.dto.FishDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,14 +18,14 @@ import java.util.List;
 @Setter // 임시
 @NoArgsConstructor // 임시
 @AllArgsConstructor
-@Table(name = "gmool")
-public class GmoolEntity {
+@Table(name = "fish")
+public class FishEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @Column
-    private String gmoolName;
+    private String fishName;
 
     @Column
     private String password;
@@ -44,18 +44,15 @@ public class GmoolEntity {
     @Column
     private int pinNumber;
 
-    @OneToMany(mappedBy = "gmoolEntity", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(mappedBy = "fishEntity", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<FileEntity> fileEntityList;
 
     @Column
     private int fileCount;
 
-    //@OneToOne(mappedBy = "gmoolEntity", cascade = CascadeType.REMOVE, orphanRemoval = true)
-    //private UploadEntity uploadEntity;
-
     @ManyToOne
     @JoinColumn(name="member_id")
-    private MemberEntity gmoolOwner;
+    private MemberEntity fishOwner;
 
     public void updatePinNumber(int pinNumber){
         this.pinNumber = pinNumber;
@@ -65,23 +62,19 @@ public class GmoolEntity {
         fileEntityList.add(fileEntity);
     }
 
-    public void setGmoolOwner(MemberEntity memberEntity){
-        gmoolOwner = memberEntity;
-    }
-
-    public static GmoolEntity toGmoolEntity(GmoolDTO gmoolDTO) {
+    public static FishEntity toFishEntity(FishDTO fishDTO) {
         // TODO: fileEntityList, gmoolOwner 처리 -> setter로 설정?
 
-        return new GmoolEntity(
-                gmoolDTO.getId(),
-                gmoolDTO.getGmoolName(),
-                gmoolDTO.getPassword(),
-                gmoolDTO.getCreatedTime(),
-                gmoolDTO.getUpdatedTime(),
-                gmoolDTO.getDueMinute(),
-                gmoolDTO.getPinNumber(),
+        return new FishEntity(
+                fishDTO.getId(),
+                fishDTO.getFishName(),
+                fishDTO.getPassword(),
+                fishDTO.getCreatedTime(),
+                fishDTO.getUpdatedTime(),
+                fishDTO.getDueMinute(),
+                fishDTO.getPinNumber(),
                 new ArrayList<>(),
-                gmoolDTO.getFileCount(),
+                fishDTO.getFileCount(),
                 null
         );
     }

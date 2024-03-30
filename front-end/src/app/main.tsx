@@ -1,12 +1,8 @@
 import React, { useState } from 'react'
 import '../tailwind.css';
-import { Link } from 'react-router-dom';
-//import { Link } from 'react-router-dom';
-//import {  BrowserRouter, Link,  } from 'react-router-dom';
-//import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from 'react-router-dom';
 
 const EachFileShow:React.FC = (props) => {
-
     return <div>
         { props[1]<5 ? <button className='text-[20px]'>🐟</button>
             :(props[1] <10) ? <button className='text-[30px]'>🐠</button>
@@ -29,29 +25,41 @@ const MyFishCom:React.FC = () => {
 
 const FileUploadInput:React.FC=()=>{
     const [active, setActive] = useState(false)
+    const navi = useNavigate();
 
-    const handleDragStart = () => { setActive(true) }
-    const handleDragEnd = () =>{ setActive(false) }
-    //const handleDragOver = (event) => {event.preventDefault()}
-    const handleDrop = (event) => {
-        event?.preventDefault();
+    const handleDragOn = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setActive(true) 
     }
-
+    const handleDragEnd = (e) =>{ 
+        e.preventDefault();
+        e.stopPropagation();
+        setActive(false) 
+    }
+    
+    const handleDrop = (e) => {
+        e?.preventDefault();
+        e.stopPropagation();
+        console.log(e.dataTransfer.files[0]);
+        setActive(false) 
+        navi('/upload')
+        //파일 정보 어떻게?
+    }
     return <div className='h-full flex flex-col justify-center bg-white w-1/3 max-w-[521px] rounded-[50px]'>
         <h1 className='text-[50px] font-semibold flex justify-center mt-4 '>FISH 보내기</h1>
-        <label 
-        onDragStart={handleDragStart} 
-        onDragEnter={handleDragStart} 
-        //onDragOver={handleDragEnd}
-        onDragLeave={handleDragEnd} 
-        onDrop={handleDrop}
-            className={`mt-3 m-9 h-full border-2 border-dashed rounded-[50px] hover:border-[#27416D] flex flex-col
-                ${active? 'border-[#27416D] bg-[#879DB4]':'border-[#879DB4] bg-[#F7FDFF]'} justify-center items-center`}> 
-            <input type='file' className='w-full hidden'/> 
+        <label htmlFor="file"
+        onDragEnter={ handleDragOn } //들어올 때
+        onDragOver={ handleDragOn } //위에 있을 때
+        onDragLeave={ handleDragEnd } 
+        onDrop={ handleDrop }
+        className={`mt-3 m-9 h-full border-2 border-dashed rounded-[50px] hover:border-[#27416D] flex flex-col
+            ${active? 'border-[#27416D]':'border-[#879DB4]'} bg-[#F7FDFF] justify-center items-center`}> 
                 <h1 className='text-[100px]'>🐟</h1>
-                <h1 className='text-[30px]'>파일을 여기에</h1><h1 className='text-[30px]'>끌어주세요</h1>
-           
+                <h1 className='text-[30px]'>파일을 여기에</h1>
+                <h1 className='text-[30px]'>끌어주세요</h1>
         </label>
+        <input id="file" type='file' className='w-full hidden'/>         
     </div>
 }
 
@@ -72,6 +80,7 @@ export const MainPage:React.FC=()=>{
     function handleLogOutBtn() {
         setUserID(null);
     }
+    
 
     return (<div className='MainPageCSS'>
         <div className='flex flex-row items-end'>
@@ -115,7 +124,7 @@ export const MainPage:React.FC=()=>{
                 
             </div>
         </div>
-        <h1 className='text-[150px] absolute bottom-0 right-3/4'><img src="/img/coral.png" className="w-[350px]"/></h1>
+        <h1 className='text-[150px] absolute bottom-0 right-3/4 -z-30'><img src="/img/coral.png" className="w-[350px]"/></h1>
         <h1 className='text-[100px] absolute bottom-0 left-3/4'><img src="/img/coral.png" className="w-[200px]"/></h1>
     </div>)
 }

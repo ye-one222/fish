@@ -25,8 +25,7 @@ public class MemberResponseDTO {
         lastName = m.getLastName();
     }
 
-    public static MemberResponseDTO toMemberDTO(MemberEntity memberEntity) {
-        // TODO: toMemberDTO 완성
-        return new MemberResponseDTO("id", "Jane", "Doe");
+    public static MemberResponseDTO toMemberDTO(MemberEntity me) {
+        return new MemberResponseDTO(me);
     }
 }

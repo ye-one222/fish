@@ -1,12 +1,13 @@
 package com.fisherman.fish.config;
 
-import com.fisherman.fish.jwt.JWTUtil;
-import com.fisherman.fish.jwt.LoginFilter;
+import com.fisherman.fish.utility.JWTUtil;
+import com.fisherman.fish.filter.LoginFilter;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.apache.catalina.User;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -34,6 +35,9 @@ public class SecurityConfig {
                         .requestMatchers("/h2-console/**").permitAll() // h2 콘솔 허용
                         .requestMatchers("/users/login", "/users/signup").permitAll() // 로그인, 회원 가입 경로 허용
                         .requestMatchers("/admin").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/users/{}/gmools").permitAll()/*.hasAnyRole()*/
+                        /*.requestMatchers(HttpMethod.GET,
+                                "/gmool", "/users", "/users/{userId}").hasRole("ADMIN")*/ // 나중에 주석 해제
                         .anyRequest().permitAll()
                 )
                 // csrf는 필요 없다

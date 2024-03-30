@@ -13,7 +13,7 @@
 //    @Id
 //    @JoinColumn(name="gmool_id")
 //    @OneToOne
-//    private GmoolEntity gmoolEntity;
+//    private FishEntity gmoolEntity;
 //
 //    @JoinColumn(name="member_id")
 //    @ManyToOne

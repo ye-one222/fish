@@ -14,8 +14,14 @@ public class MemberRequestDTO {
     private String firstName; // 이름
     private String lastName; // 성
 
+    public MemberRequestDTO(MemberEntity memberEntity){
+        id = memberEntity.getId();
+        password = memberEntity.getPassword();
+        firstName = memberEntity.getFirstName();
+        lastName = memberEntity.getLastName();
+    }
+
     public static MemberRequestDTO toMemberDTO(MemberEntity memberEntity) {
-        // TODO: toMemberDTO 완성
-        return new MemberRequestDTO("id", "pw", "Jane", "Doe");
+        return new MemberRequestDTO(memberEntity);
     }
 }

@@ -1,7 +1,7 @@
 package com.fisherman.fish.dto;
 
 import com.fisherman.fish.entity.FileEntity;
-import com.fisherman.fish.entity.GmoolEntity;
+import com.fisherman.fish.entity.FishEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,9 +14,9 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @ToString
-public class GmoolDTO {
+public class FishDTO {
     private long id; // 그물 id
-    private String gmoolName; // 그물명
+    private String fishName; // 그물명
     private String password; // 그물 암호
     private LocalDateTime createdTime; // 생성시각
     private LocalDateTime updatedTime; // 수정시각
@@ -27,10 +27,10 @@ public class GmoolDTO {
     private int fileCount; // 첨부 파일 수
     private String userId; // 게시자 id
 
-    public GmoolDTO(GmoolReceiveDTO g){
+    public FishDTO(FishRequestDTO g){
         // GmoolReceiver로부터 dto 생성
         id = g.getId();
-        gmoolName = g.getGmoolName();
+        fishName = g.getFishName();
         password = g.getPassword();
         createdTime = g.getCreatedTime(); // TODO: null이면 직접 부여 (완)
         dueMinute = g.getDueMinute();
@@ -40,25 +40,25 @@ public class GmoolDTO {
         userId = g.getUserId();
     }
 
-    public static GmoolDTO toGmoolDTO(GmoolEntity gmoolEntity) {
-        GmoolDTO gmoolDTO = new GmoolDTO();
-        gmoolDTO.setId(gmoolEntity.getId());
-        gmoolDTO.setGmoolName(gmoolEntity.getGmoolName());
-        gmoolDTO.setPassword(gmoolEntity.getPassword());
-        gmoolDTO.setCreatedTime(gmoolEntity.getCreatedTime());
-        gmoolDTO.setDueMinute(gmoolEntity.getDueMinute());
-        gmoolDTO.setPinNumber(gmoolEntity.getPinNumber());
-        List<FileEntity> fileEntityList = gmoolEntity.getFileEntityList();
+    public static FishDTO toFishDTO(FishEntity fishEntity) {
+        FishDTO fishDTO = new FishDTO();
+        fishDTO.setId(fishEntity.getId());
+        fishDTO.setFishName(fishEntity.getFishName());
+        fishDTO.setPassword(fishEntity.getPassword());
+        fishDTO.setCreatedTime(fishEntity.getCreatedTime());
+        fishDTO.setDueMinute(fishEntity.getDueMinute());
+        fishDTO.setPinNumber(fishEntity.getPinNumber());
+        List<FileEntity> fileEntityList = fishEntity.getFileEntityList();
         List<FileDTO> fileDTOList = new ArrayList<>();
         for(FileEntity f : fileEntityList)fileDTOList.add(FileDTO.toFileDTO(f));
-        gmoolDTO.setFileDTOList(fileDTOList);
-        gmoolDTO.setFileCount(gmoolEntity.getFileCount());
-        return gmoolDTO;
+        fishDTO.setFileDTOList(fileDTOList);
+        fishDTO.setFileCount(fishEntity.getFileCount());
+        return fishDTO;
     }
 
-    public static GmoolDTO toGmoolDTO(GmoolReceiveDTO gmoolReceiveDTO) {
-        gmoolReceiveDTO.convertFilesToFileDTOList();
-        return gmoolReceiveDTO;
+    public static FishDTO toFishDTO(FishRequestDTO fishRequestDTO) {
+        fishRequestDTO.convertFilesToFileDTOList();
+        return fishRequestDTO;
     }
 
 }

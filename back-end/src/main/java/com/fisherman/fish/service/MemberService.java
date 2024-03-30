@@ -17,15 +17,18 @@ import java.util.Optional;
 public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
-    public List<MemberResponseDTO> getAllMembers() {
-        // TODO : Member서비스 완성
+    public List<MemberResponseDTO> findAll() {
         // 모든 회원 dto 반환
         List<MemberResponseDTO> memberDTOList = new ArrayList<>();
+        List<MemberEntity> memberEntityList = memberRepository.findAll();
+        if(memberEntityList.isEmpty()) return new ArrayList<>();
+        memberEntityList.iterator().forEachRemaining((memberEntity -> {
+            memberDTOList.add(MemberResponseDTO.toMemberDTO(memberEntity));
+        }));
         return memberDTOList;
     }
 
-    public MemberResponseDTO searchById(String id) {
-        // TODO : Member서비스 완성
+    public MemberResponseDTO findById(String id) {
         // id로 회원 검색
         Optional<MemberEntity> optionalMemberEntity = memberRepository.findById(id);
         if (optionalMemberEntity.isEmpty()) return null;

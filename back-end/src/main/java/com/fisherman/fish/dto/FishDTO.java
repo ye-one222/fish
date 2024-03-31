@@ -2,10 +2,13 @@ package com.fisherman.fish.dto;
 
 import com.fisherman.fish.entity.FileEntity;
 import com.fisherman.fish.entity.FishEntity;
+import jakarta.transaction.Transactional;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.LazyInitializationException;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -50,7 +53,18 @@ public class FishDTO {
         fishDTO.setPinNumber(fishEntity.getPinNumber());
         List<FileEntity> fileEntityList = fishEntity.getFileEntityList();
         List<FileDTO> fileDTOList = new ArrayList<>();
-        for(FileEntity f : fileEntityList)fileDTOList.add(FileDTO.toFileDTO(f));
+        try {
+            for (FileEntity f : fileEntityList)
+                fileDTOList.add(FileDTO.toFileDTO(f));
+        } catch (LazyInitializationException le){
+            // TODO : fishService init()에서 lazy load 뜸. 근데 사실 상관없으므로 catch로 에러잡고 진행.
+            // - 근데 마음에 안드니까 나중에 고쳐보자
+            System.out.println("Lazy load exception for file entities for fish '" + fishDTO.id + "'");
+        }
+        catch (Exception e){
+            System.out.println("Error handling File Entities for fish '" + fishDTO.id + "'");
+            e.printStackTrace();
+        }
         fishDTO.setFileDTOList(fileDTOList);
         fishDTO.setFileCount(fishEntity.getFileCount());
         return fishDTO;

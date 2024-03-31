@@ -9,15 +9,15 @@ import com.fisherman.fish.repository.FileRepository;
 import com.fisherman.fish.repository.FishRepository;
 import com.fisherman.fish.repository.MemberRepository;
 import com.fisherman.fish.utility.FileUtil;
+import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.time.ZoneId;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -28,18 +28,44 @@ public class FishService {
     private final FileUtil fileUtil;
 
 
+    private final Map<Integer, Long> pinMap = new HashMap<>();
+    private static int gmoolCount = 0; // test
 
     private static int fishCount = 0; // test
     private static int pinNumber = 0;
 
-    public static int generatePinNumber() {
-        // TODO : 핀번호 관리
-        // 랜덤으로 생성
-        // 현재 사용 중인 pin번호 : hashmap에 관리?
-        // 해당 번호가 찬 경우 : 1, 2, 4, 8, ... 순으로 커지도록?
-        // -> 근데 이러면 자기 번호에서 1을 더하면 바로 다른 사람 께 보이니까 비효율적이지 않나??
+    @PostConstruct
+    @Transactional
+    public void init(){
+        // pinMap 초기화
+        List<FishDTO> fishes = findAll();
+        for(FishDTO f : fishes){
+            int key = f.getPinNumber();
+            long val = f.getCreatedTime().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+            System.out.println(key + ", " + val);
+            pinMap.put(key, val);
+        }
+    }
 
-        return pinNumber++;
+    public int generatePinNumber(int dueMinute) {
+        // 랜덤 핀 생성
+        int candidatePin;
+        boolean isPinValid;
+        do {
+            isPinValid = false;
+            Random random = new Random();
+            random.setSeed(System.currentTimeMillis());
+            candidatePin = random.nextInt(999999);
+
+            Long expireDate = pinMap.get(candidatePin);
+            if(expireDate == null || expireDate < System.currentTimeMillis())
+                // pin이 할당되지 않았거나, 할당되었지만 유효기간이 지난 경우 반복문 break
+                isPinValid = true;
+
+        } while (!isPinValid);
+
+        pinMap.put(candidatePin, System.currentTimeMillis() + (long) dueMinute * 6000);
+        return candidatePin;
     }
 
     @Transactional
@@ -64,6 +90,38 @@ public class FishService {
         return fishDTOS;
     }
 
+    public FishDTO findByPinNumber(String pinNumber){
+        // int로 파싱해서 넘겨줌
+        try {
+            return findByPinNumber(Integer.parseInt(pinNumber));
+        } catch (NumberFormatException e){
+            System.out.println("findByPinNumber - '" + pinNumber + "' doesn't match the rule");
+            return null;
+        }
+    }
+
+    @Transactional
+    public FishDTO findByPinNumber(int pinNumber) {
+        // 핀번호로 fish 가져오기
+        //   핀번호가 겹치는 fish가 존재하는 경우,
+        //   가장 만료기간이 오래 남은 fish만 유효하므로 그걸 반환한다
+        if(pinNumber < 0 || pinNumber > 999999){
+            System.out.println("findByPinNumber - '" + pinNumber + "' doesn't match the rule");
+            return null;
+        }
+        List<FishEntity> fishes = fishRepository.findByPinNumberOrderByExpireDateDesc(pinNumber);
+        System.out.println("findByPinNumber : pin " + pinNumber + " -> " + fishes);
+        if(fishes.isEmpty()){
+            return null;
+        }
+        List<FishDTO> fishDTOs = new ArrayList<>();
+        fishes.forEach(fishEntity -> {
+            fishDTOs.add(FishDTO.toFishDTO(fishEntity));
+        });
+        // 가장 만료기간 오래 남은 fish 반환
+        return fishDTOs.get(0);
+    }
+
     /**
      * save():
      * 해당 그물을 저장한다.
@@ -84,7 +142,7 @@ public class FishService {
 
         System.out.println("FishService: [save() called]"); // test
         // 1. pin 번호 생성
-        int pinNumber = FishService.generatePinNumber();
+        int pinNumber = generatePinNumber(fishDTO.getDueMinute());
         fishDTO.setPinNumber(pinNumber);
         System.out.println("- pinNumber " + pinNumber + " created."); // test
 

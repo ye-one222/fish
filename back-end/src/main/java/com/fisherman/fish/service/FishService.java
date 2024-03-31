@@ -90,6 +90,40 @@ public class FishService {
         return fishDTOS;
     }
 
+    public FishDTO findByPinNumber(String pinNumber){
+        // int로 파싱해서 넘겨줌
+        try {
+            return findByPinNumber(Integer.parseInt(pinNumber));
+        } catch (NumberFormatException e){
+            System.out.println("findByPinNumber - '" + pinNumber + "' doesn't match the rule");
+            return null;
+        }
+    }
+
+    @Transactional
+    public FishDTO findByPinNumber(int pinNumber) {
+        // 핀번호로 fish 가져오기
+        //   핀번호가 겹치는 fish가 존재하는 경우,
+        //   가장 만료기간이 오래 남은 fish만 유효하므로 그걸 반환한다
+        if(pinNumber < 0 || pinNumber > 999999){
+            System.out.println("findByPinNumber - '" + pinNumber + "' doesn't match the rule");
+            return null;
+        }
+        Optional<List<FishEntity>> optionalFishes = fishRepository.findByPinNumberOrderByExpireDateDesc(pinNumber);
+        System.out.println("findByPinNumber : " + optionalFishes);
+        if (optionalFishes.isEmpty()) return null;
+        List<FishDTO> fishDTOs = new ArrayList<>();
+        optionalFishes.get().forEach(fishEntity -> {
+            fishDTOs.add(FishDTO.toFishDTO(fishEntity));
+        });
+        if(fishDTOs.isEmpty()){
+            // 원래 Optional::isEmpty로 걸러야되는데 안됨... TODO
+            return null;
+        }
+        // 가장 만료기간 오래 남은 fish 반환
+        return fishDTOs.get(0);
+    }
+
     /**
      * save():
      * 해당 그물을 저장한다.

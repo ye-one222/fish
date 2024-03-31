@@ -41,6 +41,8 @@ public class FishEntity {
     @Column
     private int dueMinute;
 
+    public void setDueMinute(int dueMinute) { this.dueMinute = (dueMinute >= 0) ? dueMinute : 0; }
+
     @Column
     private int pinNumber;
 

@@ -15,5 +15,5 @@ public interface FishRepository extends JpaRepository<FishEntity, Long> {
             "WHERE f.pin_number = ? " +
             "ORDER BY created_time + due_minute * 60000 DESC", nativeQuery = true)
     // 만료기간 가장 긴 순으로 정렬
-    Optional<List<FishEntity>> findByPinNumberOrderByExpireDateDesc(int pinNumber);
+    List<FishEntity> findByPinNumberOrderByExpireDateDesc(int pinNumber);
 }

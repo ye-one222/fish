@@ -109,17 +109,15 @@ public class FishService {
             System.out.println("findByPinNumber - '" + pinNumber + "' doesn't match the rule");
             return null;
         }
-        Optional<List<FishEntity>> optionalFishes = fishRepository.findByPinNumberOrderByExpireDateDesc(pinNumber);
-        System.out.println("findByPinNumber : " + optionalFishes);
-        if (optionalFishes.isEmpty()) return null;
-        List<FishDTO> fishDTOs = new ArrayList<>();
-        optionalFishes.get().forEach(fishEntity -> {
-            fishDTOs.add(FishDTO.toFishDTO(fishEntity));
-        });
-        if(fishDTOs.isEmpty()){
-            // 원래 Optional::isEmpty로 걸러야되는데 안됨... TODO
+        List<FishEntity> fishes = fishRepository.findByPinNumberOrderByExpireDateDesc(pinNumber);
+        System.out.println("findByPinNumber : pin " + pinNumber + " -> " + fishes);
+        if(fishes.isEmpty()){
             return null;
         }
+        List<FishDTO> fishDTOs = new ArrayList<>();
+        fishes.forEach(fishEntity -> {
+            fishDTOs.add(FishDTO.toFishDTO(fishEntity));
+        });
         // 가장 만료기간 오래 남은 fish 반환
         return fishDTOs.get(0);
     }

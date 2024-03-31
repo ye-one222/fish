@@ -62,11 +62,12 @@ public class FishController {
         return savedDTO;
     }
 
-    @GetMapping("/{gid}")
-    public Object getFish(@PathVariable(name="gid") Long gid){
+    @GetMapping("/{pin}")
+    public Object getFish(@PathVariable(name="pin") int pin){
         // TODO : 비밀번호 맞춰야 함
         // 해당 그물 반환
-        FishDTO fish = fishService.findById(gid);
+        //FishDTO fish = fishService.findById(pin);
+        FishDTO fish = fishService.findByPinNumber(pin);
         if(fish == null) return "no fish for you!";
         return fish;
     }

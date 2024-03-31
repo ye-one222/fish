@@ -63,13 +63,13 @@ public class FishController {
     }
 
     @GetMapping("/{pin}")
-    public Object getFish(@PathVariable(name="pin") int pin){
+    public ResponseEntity<FishDTO> getFish(@PathVariable(name="pin") int pin){
         // TODO : 비밀번호 맞춰야 함
         // 해당 그물 반환
         //FishDTO fish = fishService.findById(pin);
         FishDTO fish = fishService.findByPinNumber(pin);
-        if(fish == null) return "no fish for you!";
-        return fish;
+        if(fish == null) return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(fish);
     }
 
     @GetMapping("/{gid}/files")

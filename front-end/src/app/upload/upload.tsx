@@ -222,8 +222,8 @@ export const UploadPage:React.FC<UploadProps> = ( {file} )=>{
                     <input
                         required
                         type="text"
-                        name="gmoolName"
-                        className="w-full m-2 [font-family:'Inter-Regular',Helvetica] font-normal text-[#818da2] text-[20px] tracking-[0] leading-[normal] bg-[#E8FAFD] rounded-[50px] px-6 py-5"
+                        name="fishName"
+                        className="InputBoxCSS"
                     />
 
                     <div className="flex flex-row justify-between mt-8">
@@ -238,26 +238,32 @@ export const UploadPage:React.FC<UploadProps> = ( {file} )=>{
                         required
                         type="password"
                         name="password"
-                        className="w-full m-2 [font-family:'Inter-Regular',Helvetica] font-normal text-[#818da2] text-[20px] tracking-[0] leading-[normal] bg-[#E8FAFD] rounded-[50px] px-6 py-5"
+                        className="InputBoxCSS"
                     />
 
-                    <div className="flex flex-row items-start mt-20 gap-10">
+                    <div className="flex flex-row items-start mt-20 gap-1">
                         <div className="flex flex-col">
                             <div className="[font-family:'Inter',Helvetica] font-bold text-[#27416d] text-[20px] tracking-[0] leading-[normal]">
                                 유효시간 (분)
                             </div>
-                            <select name="dueMinute" className="w-full bg-[#E8FAFD] m-2 [font-family:'Inter-Regular',Helvetica] font-normal text-[#818da2] text-[20px] rounded-[50px] px-6 py-5">
+                            <input
+                                required
+                                type="number"
+                                name="dueMinute"
+                                className="w-1/2 InputBoxCSS"
+                                />
+                            {/*<select name="dueMinute" className="w-full bg-[#E8FAFD] m-2 [font-family:'Inter-Regular',Helvetica] font-normal text-[#818da2] text-[20px] rounded-[50px] px-6 py-5">
                                 {durations.map((duration, index) => {
                                     return (
                                         <option key={index} value={index}>{duration}</option>
                                     )
                                 })}
-                            </select>
+                            </select>*/}
                         </div>
             
                         <button
                             type="submit" 
-                            className="mt-[32px] [font-family:'Inter-Medium',Helvetica] font-bold text-[#27416d] text-[30px] text-center tracking-[0] leading-[normal] bg-[#E8FAFD] rounded-[50px] px-9 py-3 border border-transparent hover:border-[#27416d]"
+                            className="mt-[32px] [font-family:'Inter-Medium',Helvetica] font-bold text-[#27416d] text-[30px] text-center tracking-[0] leading-[normal] bg-[#E8FAFD] rounded-[50px] px-12 py-5 border border-transparent hover:border-[#27416d]"
                             value="보내기"
                         >
                             만들기

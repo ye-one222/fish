@@ -1,7 +1,6 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import '../tailwind.css';
 import { Link, useNavigate } from 'react-router-dom';
-import base64 from "base-64";
 
 const EachFileShow:React.FC = (props) => {
     return <div>
@@ -77,10 +76,16 @@ const DownButton:React.FC= () => {
 
 export const MainPage:React.FC=()=>{
     const LOGINKEY = "fish-login-token";
-    const token = localStorage.getItem(LOGINKEY);
-    const [userID, setUserID] = useState<string | null>(
-        token ? JSON.parse(atob(token.split('.')[1])).id : null
-    );
+    const [userID, setUserID] = useState<string | null>(null);
+
+    useEffect(() => {
+        const token = localStorage.getItem(LOGINKEY);
+        if (token) {
+            const decodedToken = JSON.parse(atob(token.split('.')[1]));
+            const userIdFromToken = decodedToken.id;
+            setUserID(userIdFromToken);
+        }
+    }, []);
 
     function handleLogOutBtn() {
         localStorage.setItem(LOGINKEY, '');

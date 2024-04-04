@@ -96,6 +96,7 @@ export const UploadPage:React.FC<UploadProps> = ( {file} )=>{
     const fileCnt = useRef(1);
     const durations = [30, 60, 120, 240, 360, 720]; //분 기준 / 나중에 1시간->60분으로 변환하는 함수 만들면 더 좋을듯
     const [ active, setActive ] = useState(false);
+    const dataTransfer = new DataTransfer();
   
     const handleButtonClick = e => {
         if (fileInput.current) {
@@ -109,7 +110,16 @@ export const UploadPage:React.FC<UploadProps> = ( {file} )=>{
             return [...prevFileList, ...filesArray]; // 이전 파일 목록과 새로운 파일들을 합친 새로운 배열 반환
         });
         fileCnt.current++;
-        console.log(fileList);
+
+        for (let i=0; i<fileList.length; i++) {
+            dataTransfer.items.add(fileList[i]);
+        }
+
+        const files = e.target.files;
+        for (let i = 0; i < files.length; i++) {
+            dataTransfer.items.add(files[i]);
+        }
+        console.log(dataTransfer);
     }
 
     const handleDelete = ( name ) => {
@@ -118,7 +128,7 @@ export const UploadPage:React.FC<UploadProps> = ( {file} )=>{
     }
 
     const onDropFiles = (e) => {
-        console.log({ e }, e.dataTransfer.files);
+        //console.log({ e }, e.dataTransfer.files);
         e.preventDefault();
         setActive(false);
 
@@ -127,6 +137,16 @@ export const UploadPage:React.FC<UploadProps> = ( {file} )=>{
             return [...prevFileList, ...filesArray];
         });
         fileCnt.current++;
+
+        for (let i=0; i<fileList.length; i++) {
+            dataTransfer.items.add(fileList[i]);
+        }
+
+        const files = e.dataTransfer.files;
+        for (let i = 0; i < files.length; i++) {
+            dataTransfer.items.add(files[i]);
+        }
+        console.log(dataTransfer);
     };
 
     const handleDragOn = (e) => {
@@ -142,7 +162,7 @@ export const UploadPage:React.FC<UploadProps> = ( {file} )=>{
                 새로운 FISH 만들기
             </div>
             
-            <form action="http://localhost:8080/gmool" method="post" encType="multipart/form-data" className="flex flex-row w-full h-full justify-center gap-20">
+            <form action="http://localhost:8080/fishes" method="post" encType="multipart/form-data" className="flex flex-row w-full h-full justify-center gap-20">
                 {/* 왼쪽 박스 */}
                 <div className="flex flex-col items-center h-2/3 w-1/3 max-w-[521px] max-h-[592px] mt-10 p-6 bg-[#e7fafc] rounded-[50px] gap-5">
                     <div className={`w-full h-3/4 flex flex-col items-center bg-[#f7fdff] rounded-[50px] border-2 border-dashed ${active?"border-[#27416D]":"border-[#879DB4]"}`}
@@ -186,7 +206,7 @@ export const UploadPage:React.FC<UploadProps> = ( {file} )=>{
                         name="files"
                         className='hidden'
                         ref={fileInput}
-                        onChange={handleChange}/>       
+                        onChange={handleChange}/>      
                 </div>
 
                 {/* 오른쪽 박스 */}
@@ -202,8 +222,8 @@ export const UploadPage:React.FC<UploadProps> = ( {file} )=>{
                     <input
                         required
                         type="text"
-                        name="gmoolName"
-                        className="w-full m-2 [font-family:'Inter-Regular',Helvetica] font-normal text-[#818da2] text-[20px] tracking-[0] leading-[normal] bg-[#E8FAFD] rounded-[50px] px-6 py-5"
+                        name="fishName"
+                        className="InputBoxCSS"
                     />
 
                     <div className="flex flex-row justify-between mt-8">
@@ -218,26 +238,32 @@ export const UploadPage:React.FC<UploadProps> = ( {file} )=>{
                         required
                         type="password"
                         name="password"
-                        className="w-full m-2 [font-family:'Inter-Regular',Helvetica] font-normal text-[#818da2] text-[20px] tracking-[0] leading-[normal] bg-[#E8FAFD] rounded-[50px] px-6 py-5"
+                        className="InputBoxCSS"
                     />
 
-                    <div className="flex flex-row items-start mt-20 gap-10">
+                    <div className="flex flex-row items-start mt-20 gap-1">
                         <div className="flex flex-col">
                             <div className="[font-family:'Inter',Helvetica] font-bold text-[#27416d] text-[20px] tracking-[0] leading-[normal]">
                                 유효시간 (분)
                             </div>
-                            <select name="dueMinute" className="w-full bg-[#E8FAFD] m-2 [font-family:'Inter-Regular',Helvetica] font-normal text-[#818da2] text-[20px] rounded-[50px] px-6 py-5">
+                            <input
+                                required
+                                type="number"
+                                name="dueMinute"
+                                className="w-1/2 InputBoxCSS"
+                                />
+                            {/*<select name="dueMinute" className="w-full bg-[#E8FAFD] m-2 [font-family:'Inter-Regular',Helvetica] font-normal text-[#818da2] text-[20px] rounded-[50px] px-6 py-5">
                                 {durations.map((duration, index) => {
                                     return (
                                         <option key={index} value={index}>{duration}</option>
                                     )
                                 })}
-                            </select>
+                            </select>*/}
                         </div>
             
                         <button
                             type="submit" 
-                            className="mt-[32px] [font-family:'Inter-Medium',Helvetica] font-bold text-[#27416d] text-[30px] text-center tracking-[0] leading-[normal] bg-[#E8FAFD] rounded-[50px] px-9 py-3 border border-transparent hover:border-[#27416d]"
+                            className="mt-[32px] [font-family:'Inter-Medium',Helvetica] font-bold text-[#27416d] text-[30px] text-center tracking-[0] leading-[normal] bg-[#E8FAFD] rounded-[50px] px-12 py-5 border border-transparent hover:border-[#27416d]"
                             value="보내기"
                         >
                             만들기

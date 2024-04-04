@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import '../tailwind.css';
 import { Link, useNavigate } from 'react-router-dom';
 
@@ -11,11 +11,11 @@ const EachFileShow:React.FC = (props) => {
     </div>
 }
 
-const MyFishCom:React.FC = () => {
+const MyFishCom:React.FC<{id: string} > = ({ id }) => {
     const myFile = [["file1",8], ['file2',15], ['file3',1], ['file4',2]]
     
     return <div className='h-full bg-white rounded-[50px] mt-10'>
-        <h1 className='text-[40px] font-semibold p-4 flex justify-center'>나의 FISH</h1>
+        <h1 className='text-[40px] font-semibold p-4 flex justify-center'>{`${id}의 FISH`}</h1>
         <div className=''>
             {myFile.map((each)=>(EachFileShow(each)))}
             <button>{}</button>
@@ -75,12 +75,22 @@ const DownButton:React.FC= () => {
 }
 
 export const MainPage:React.FC=()=>{
-    const [userID,setUserID] = useState<string|null>('')
-      
+    const LOGINKEY = "fish-login-token";
+    const [userID, setUserID] = useState<string | null>(null);
+
+    useEffect(() => {
+        const token = localStorage.getItem(LOGINKEY);
+        if (token) {
+            const decodedToken = JSON.parse(atob(token.split('.')[1]));
+            const userIdFromToken = decodedToken.id;
+            setUserID(userIdFromToken);
+        }
+    }, []);
+
     function handleLogOutBtn() {
-        setUserID(null);
+        localStorage.setItem(LOGINKEY, '');
+        setUserID('');
     }
-    
 
     return (<div className='MainPageCSS'>
         <div className='flex flex-row items-end'>
@@ -93,28 +103,28 @@ export const MainPage:React.FC=()=>{
         <h1 className='text-[28px]'>당신의 파일을 책임질 파일 공유 서비스</h1>
         <div className='font-semibold flex flex-row items-center justify-between w-full'>
         <h1 className='flex text-[80px] '>🐠</h1>
-            {userID ? 
+            {userID ?
                 <button onClick={handleLogOutBtn} className='flex absolute left-3/4 text-[30px] rounded-3xl bg-white pl-3 pr-3 
                     border border-white hover:border-[#27416D] transition-all'>
                         LOG OUT</button>:
-                    <div className=' grid-flow-row text-[30px] absolute left-3/4'>
-                        <Link to={'/login'}>
-                            <button className='rounded-3xl bg-white mb-2 mr-2 pl-3 pr-3 
-                                border border-white hover:border-[#27416D] transition-all'>
-                                    LOG IN</button>
-                        </Link>
-                        <Link to={'/signup'}>
-                            <button className='rounded-3xl pl-3 pr-3 border border-[#E8FAFD] hover:border-[#27416D] transition-all'>
-                            SIGN UP</button>
-                        </Link>
-                    </div>
+                <div className=' grid-flow-row text-[30px] absolute left-3/4'>
+                    <Link to={'/login'}>
+                        <button className='rounded-3xl bg-white mb-2 mr-2 pl-3 pr-3 
+                            border border-white hover:border-[#27416D] transition-all'>
+                                LOG IN</button>
+                    </Link>
+                    <Link to={'/signup'}>
+                        <button className='rounded-3xl pl-3 pr-3 border border-[#E8FAFD] hover:border-[#27416D] transition-all'>
+                        SIGN UP</button>
+                    </Link>
+                </div>
             }
         </div>
         <div className='flex flex-row gap-4 w-full justify-center'>
             <FileUploadInput/>
             <div className='h-full flex flex-col w-1/3 max-w-[430px]'>
                 <DownButton/>
-                {userID ? <MyFishCom/>:
+                {userID ? <MyFishCom id={userID}/>:
                     <div>
                         <h1 className='text-[150px] flex justify-center'>🐳</h1>
                         <h1 className='text-[80px] flex justify-end'>🐟</h1>

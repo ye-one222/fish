@@ -1,4 +1,4 @@
-import React, { SetStateAction, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import '../tailwind.css';
 import { Link, useNavigate } from 'react-router-dom';
 import { UploadPage } from './upload/upload.tsx';
@@ -16,11 +16,11 @@ const EachFileShow:React.FC = (props) => {
     </div>
 }
 
-const MyFishCom:React.FC = () => {
+const MyFishCom:React.FC<{id: string} > = ({ id }) => {
     const myFile = [["file1",8], ['file2',15], ['file3',1], ['file4',2]]
     
     return <div className='h-full bg-white rounded-[50px] mt-10'>
-        <h1 className='text-[40px] font-semibold p-4 flex justify-center'>나의 FISH</h1>
+        <h1 className='text-[40px] font-semibold p-4 flex justify-center'>{`${id}의 FISH`}</h1>
         <div className=''>
             {myFile.map((each)=>(EachFileShow(each)))}
             <button>{}</button>
@@ -89,17 +89,21 @@ const DownButton:React.FC= () => {
 export const MainPage:React.FC=()=>{
     const [ userID,setUserID ] = useState<string|null>('')
     const [ oneFish, setOneFish ] = useState<File|null>()
-      
-    useEffect(()=>{
-        if(localStorage.getItem("fish-login-token")){
-            setUserID(localStorage.getItem("fish-login-token"));
-        }else{
-            setUserID(null);
+    
+    const LOGINKEY = "fish-login-token";
+
+    useEffect(() => {
+        const token = localStorage.getItem(LOGINKEY);
+        if (token) {
+            const decodedToken = JSON.parse(atob(token.split('.')[1]));
+            const userIdFromToken = decodedToken.id;
+            setUserID(userIdFromToken);
         }
-    },[])
+    }, []);
+
     function handleLogOutBtn() {
-        localStorage.removeItem("fish-login-token");
-        setUserID(null);
+        localStorage.setItem(LOGINKEY, '');
+        setUserID('');
     }
     
     if(oneFish){
@@ -136,7 +140,8 @@ export const MainPage:React.FC=()=>{
                     <FileUploadInput setOneFish={setOneFish} />
                     <div className='h-full flex flex-col w-1/3 max-w-[430px]'>
                         <DownButton/>
-                        { userID && <MyFishCom/> }
+                        { userID && <MyFishCom id=''/> }
+
                     </div>
                 </div>
                 <h1 className='text-[150px] absolute bottom-0 right-3/4 -z-10'><img src="/img/coral.png" className="w-[350px]" alt='coral'/></h1>

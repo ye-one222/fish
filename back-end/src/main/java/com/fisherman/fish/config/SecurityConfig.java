@@ -1,6 +1,7 @@
 package com.fisherman.fish.config;
 
 import com.fisherman.fish.filter.FishFilter;
+import com.fisherman.fish.filter.JWTAuthFilter;
 import com.fisherman.fish.service.FishService;
 import com.fisherman.fish.utility.JWTUtil;
 import com.fisherman.fish.filter.LoginFilter;
@@ -31,11 +32,14 @@ public class SecurityConfig {
 
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        // 필터 url 설정
         LoginFilter loginFilter = new LoginFilter(authenticationManager(configuration), jwtUtil);
         loginFilter.setFilterProcessesUrl("/users/login");
         FishFilter fishFilter = new FishFilter(jwtUtil, fishService);
         fishFilter.setFilterProcessesUrl("/fishes/[0-9]+");
+        
         http
+                // 허용 url 설정
                 .authorizeHttpRequests((authorizedHttpRequests) -> authorizedHttpRequests
                         .requestMatchers("/h2-console/**").permitAll() // h2 콘솔 허용
                         .requestMatchers("/users/login", "/users/signup").permitAll() // 로그인, 회원 가입 경로 허용
@@ -51,16 +55,20 @@ public class SecurityConfig {
                 .formLogin((auth) -> auth.disable())
                 // http basic 인증 방식 해제 (찾아봐야 할듯)
                 .httpBasic((auth) -> auth.disable())
-                // 로그인 필터 등록 (UsernamePasswordAuthenticationFilter 위치에)
-                .addFilterAt(loginFilter, UsernamePasswordAuthenticationFilter.class)
-                .addFilterAt(fishFilter, UsernamePasswordAuthenticationFilter.class)
-                .sessionManagement((session) -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 세선 정책 설정 (rest api에 필요)
                 .headers((headers) -> headers
                         // 프레임 관련 (h2 콘솔 띄우기용)
                         .addHeaderWriter(new XFrameOptionsHeaderWriter(
                                 XFrameOptionsHeaderWriter.XFrameOptionsMode.SAMEORIGIN
-                        )));
+                        )))
+                ;
+        // 필터 등록
+        http
+                .addFilterAt(loginFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterAt(fishFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JWTAuthFilter(jwtUtil), LoginFilter.class)
+                .sessionManagement((session) -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 세선 정책 설정 (rest api에 필요)
+                ;
 
         return http.build();
     }

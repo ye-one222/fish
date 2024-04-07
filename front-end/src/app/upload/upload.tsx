@@ -89,8 +89,7 @@ interface UploadProps {
 }
 
 export const UploadPage:React.FC<UploadProps> = ( {file} )=>{
-    //const firstFileName = file.name;
-    const firstFileName = 'pull받아서 위에걸로 하면됨'
+    const firstFileName = file.name;
     const fileInput = useRef<HTMLInputElement | null>(null);
     const [ fileList, setFileList ] = useState<File[]>([]); //main에서 넘어온 파일정보는 배열에 추가 안함 -> 수정 필요
     const fileCnt = useRef(1);

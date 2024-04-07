@@ -10,7 +10,7 @@ import { DownLoadPage } from '../app/download/[pin]/page.tsx';
 
 //import { RouterProvider } from "react-router-dom";
 
-export type FishRouterPath = '/' | '/download' |'/login'|'/signup'|'/upload'
+export type FishRouterPath = '/' | '/download'| '/fishpassword' |'/login'|'/signup'|'/upload'
 const fishRouter = createBrowserRouter([
     {
         path: '/',
@@ -20,6 +20,10 @@ const fishRouter = createBrowserRouter([
         path:'/download',
         element: <SearchPage />,
     },
+    /*{
+        path:`/download/pin`,
+        element: <DownLoadPage  />,
+    },*/
     {
         path:'/login',
         element: <LoginPage />,
@@ -28,10 +32,10 @@ const fishRouter = createBrowserRouter([
         path:'/signup',
         element: <SignupPage />,
     },
-    {
+    /*{
         path: '/upload',
-        element: <UploadPage/>,
-    },
+        element: <UploadPage />,
+    },*/
     {
         //path: `/upload/${pin}`,
         path: '/upload/pin',

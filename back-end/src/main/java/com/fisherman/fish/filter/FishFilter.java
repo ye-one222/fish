@@ -56,30 +56,11 @@ public class FishFilter extends OncePerRequestFilter {
             System.out.println("FishFilter : no password");
             return true;
         }
-        // 헤더에 fishAuthorization이 맞으면 체크할 필요 없음
-        String fishAuthorization = request.getHeader("fishAuthorization");
-        if(fishAuthorization != null && fishAuthorization.startsWith("Bearer ")){
-            String token = "";
-            String pin = null;
-            try {
-                System.out.println("FishFilter : checking header");
-                token = fishAuthorization.split(" ")[1];
-                pin = (String) jwtUtil.get(token, "pinNumber");
-                System.out.println("FishFilter : checking header '" + token + "' with pin " + pin);
-
-                // jwt의 pinNumber와 일치하면 true 반환
-                if(pin.equals(requestPinNumber) && !jwtUtil.isExpired(token)) {
-                    System.out.println("FishFilter : correct token");
-                    return true;
-                }
-            } catch(ExpiredJwtException e) {
-                // 토큰 만료
-                System.out.println("FishFilter : '" + e.getMessage() + "'");
-            } catch(Exception e) {
-                // 토큰 변조 감지
-                System.out.println("FishFilter : invalid JWT - '" + e.getMessage() + "'");
-            }
+        // fishAuthorization 토큰이 맞으면 체크할 필요 없음
+        if(checkFishAuthorization(request, response)){
+            return true;
         }
+
         // fishAuthorization이 없는 경우, body에 올바른 fishPassword을 담았는지 확인한다.
         String password = null;
         try {
@@ -112,6 +93,34 @@ public class FishFilter extends OncePerRequestFilter {
             return false;
         }
         return true;
+    }
+
+    private boolean checkFishAuthorization(HttpServletRequest request, HttpServletResponse response) {
+        // 헤더에 fishAuthorization 토큰 올바른지 확인
+        String fishAuthorization = request.getHeader("fishAuthorization");
+        if(fishAuthorization != null && fishAuthorization.startsWith("Bearer ")){
+            String token = "";
+            String pin = null;
+            try {
+                System.out.println("FishFilter : checking header");
+                token = fishAuthorization.split(" ")[1];
+                pin = (String) jwtUtil.get(token, "pinNumber");
+                System.out.println("FishFilter : checking header '" + token + "' with pin " + pin);
+
+                // jwt의 pinNumber와 일치하면 true 반환
+                if(pin.equals(requestPinNumber) && !jwtUtil.isExpired(token)) {
+                    System.out.println("FishFilter : correct token");
+                    return true;
+                }
+            } catch(ExpiredJwtException e) {
+                // 토큰 만료
+                System.out.println("FishFilter : '" + e.getMessage() + "'");
+            } catch(Exception e) {
+                // 토큰 변조 감지
+                System.out.println("FishFilter : invalid JWT - '" + e.getMessage() + "'");
+            }
+        }
+        return false;
     }
 
     @Override

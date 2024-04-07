@@ -25,7 +25,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authenticationManager;
     private final JWTUtil jwtUtil;
-    private long tokenExpiredMs = 60*60*10L;
+    private long tokenExpiredMs = 60*60*1000L;
 
     public void setTokenExpiredMs(long tokenExpiredMs){
         if(tokenExpiredMs < 0 ) return;
@@ -71,12 +71,15 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication){
         // 로그인 성공
         System.out.println("Attempt successful.");
-        User user = (User) authentication.getPrincipal();
+
+        /*User user = (User) authentication.getPrincipal();
 
         String id = user.getUsername();
+        String role = authentication.getAuthorities().iterator().next().getAuthority();*/
+        String id = authentication.getName();
         String role = authentication.getAuthorities().iterator().next().getAuthority();
 
-        System.out.println("Hello, " + user.getUsername() + " / " + role);
+        System.out.println("Hello, " + id + " with role " + role);
 
         String token = jwtUtil.createJwt(id, role, tokenExpiredMs);
         //response.addHeader("Authorization", "Bearer " + token);

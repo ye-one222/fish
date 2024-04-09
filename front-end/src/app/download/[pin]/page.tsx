@@ -17,11 +17,13 @@ export const DownLoadPage:React.FC<PinNumType> = ({ pinNum }) => {
         userId: null
     })  //초기화
 
-    useEffect(()=>{
-        //다운로드 페이지에 정보 받아오는거 하고 있었읍~~
-       setTheFish({...theFish, fishName:'fish title hihi', 
-            fileDTOList:[{originalFileName: 'file name 1', fileSize: 500000}], fileCount: 2})
-    })
+    useEffect(()=> {
+        setTheFish({...theFish, fishName:'내 이미지들이야', 
+            fileDTOList:[{originalFileName: '첫번째 사진.jpg', fileSize: 500000},
+            {originalFileName: '두번째 사진.png', fileSize:100000}],
+            fileCount: 2})
+    },[theFish])
+    
     const stateCheckFunc = () => {
         /*fetch(`http://localhost:8080/fishes/${pinNum}`, {
             method: 'get',
@@ -51,10 +53,13 @@ export const DownLoadPage:React.FC<PinNumType> = ({ pinNum }) => {
             }
             return res.json()
         })
-        .then(data => { console.log(data); 
+        .then(data => { console.log('data = '+ data); 
             if( pinState === 'SUCESS' ){
-                setTheFish(data); //???맞는지 확인해야하는뎅,,
-                console.log(theFish);
+                //???이거 되는지 확인!!!!!!!! --- 핀번호로 fish검색api
+                setTheFish({...theFish, fishName: data.fileName, 
+                    fileDTOList:{  },
+                    fileCount: data.fileCount});
+                console.log('theFish = '+ theFish);
             }
         })*/
     }
@@ -62,23 +67,42 @@ export const DownLoadPage:React.FC<PinNumType> = ({ pinNum }) => {
     useEffect(() => { stateCheckFunc() })
    
     const handlePwInput = (e) => {
-        //인풋 들어오는거 바뀔때마다 등록해주기
         setFishPw(e.target.value);
     }
 
+/*///////////////////
+ return 시작
+//////////////////*/
+
     if( pinState === 'SUCESS' ){
-        return 
+
+        return <main className="flex flex-col justify-center items-center">
+            <header>
+                <BackToMain />
+                <h1 className=" m-[5rem] font-bold text-[50px] ">{theFish.fishName}</h1>
+            </header>
+            <div className="grid grid-cols-2 w-full justify-center">
+                {theFish.fileDTOList.map((each)=>{
+                    return <section className="flex flex-col justify-center items-center">
+                        <p >{each.originalFileName}</p>
+                        <p className="">{each.fileSize}</p>
+                    </section>
+                })}
+            </div>
+        </main>
     }
+
     if( pinState === 'NOTFIND' ){
         return <SearchPage />
     }
+    
     if( pinState === 'PWERROR'){
-        return <body className="flex flex-col justify-center items-center h-full">
+        return <main className="flex flex-col justify-center items-center h-full">
         <header className="h-1/3">
             <BackToMain />
             <h1 className="m-[50px] font-bold text-[50px] ">FISH 받기</h1>
         </header>
-        <main className="flex flex-col items-center justify-between w-full h-2/3 pt-5 pb-[200px]">
+        <section className="flex flex-col items-center justify-between w-full h-2/3 pt-5 pb-[200px]">
             <div className="flex flex-col items-center w-full">
                 <h1 className="text-[30px]">그물 암호를 입력하세요</h1>
                 <input 
@@ -91,8 +115,8 @@ export const DownLoadPage:React.FC<PinNumType> = ({ pinNum }) => {
             onClick={ () => { /*stateCheckFunc()*/ console.log(fishPw); setPinState('SUCESS'); }}
             className='bg-[#E8FAFD] rounded-[50px] text-[30px] w-[196px] h-[90px] border border-[#EFFCFE] hover:border-[#27416d] transition-all'>
                 받기</button>
-        </main>
-    </body>
+        </section>
+    </main>
     }
     
 }

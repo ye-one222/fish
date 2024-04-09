@@ -2,10 +2,7 @@ package com.fisherman.fish.entity;
 
 import com.fisherman.fish.dto.FishDTO;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -79,5 +76,11 @@ public class FishEntity {
                 fishDTO.getFileCount(),
                 null
         );
+    }
+
+    public String toString(){
+        return String.format("FishEntity(Id : %d, fishName: %s, password: %s, " +
+                "createdTime: %s, updatedTime: %s, dueMinute: %s, pinNumber: %s, fileCount: %s, fishOwner: %s)\n",
+                id, fishName, password, createdTime, updatedTime, dueMinute, pinNumber, fileCount, fishOwner.getId());
     }
 }

@@ -12,12 +12,18 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationTrustResolver;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriUtils;
 
 import java.net.MalformedURLException;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @RestController
@@ -32,14 +38,20 @@ public class FishController {
         // 모든 그물 반환
         // TODO: 그물dto 반환 시 password는 주면 안된다!
         // TODO: admin 권한 있는 경우만 보내주기
+        System.out.println("GET ~/fishes from " + SecurityContextHolder.getContext().getAuthentication().getName()
+            + "(" + SecurityContextHolder.getContext().getAuthentication().getAuthorities().iterator().next().getAuthority() + ")");
+
         List<FishDTO> fishes = fishService.findAll();
         return fishes;
     }
     
     @PostMapping
     public FishDTO createFish(@ModelAttribute FishRequestDTO fishRequestDTO){
-        // TODO: 로그인 했을 시 유저 정보 기록
-        System.out.println("FishController: [POST at '/gmool'] "); // test
+        // TODO: jwt 만료시 그냥 익명으로 처리? 혹은 에러? -> 회의 필요
+        //  - JWTUtil.java 34번째 줄, JWTAuthFilter.java 38번쨰 줄에서 exception 발생
+
+        System.out.println("FishController: [POST at '/gmool'] from " + SecurityContextHolder.getContext().getAuthentication().getName()); // test
+
         // 예외처리 : DTO 없이 POST 요청 보낸 경우
         if(fishRequestDTO == null){
             System.out.println("- EXCEPTION: fishDTO is null"); // test
@@ -50,10 +62,10 @@ public class FishController {
             System.out.println("- EXCEPTION: no files are included"); // test
             return null;
         }
-        // 예외처리 : 유효기간이 설정되어있지 않은 경우, 기본값(10분)으로 설정 TODO: 미설정시 기본값 0 맞는지 테스트 필요
+        // 예외처리 : 유효기간이 설정되어있지 않은 경우, 기본값(10분)으로 설정
         if(fishRequestDTO.getDueMinute() == 0){
             int defaultTime = 10;
-            System.out.println("- WARNING: due minute is not set; it would be set to default (" + defaultTime + ")");
+            System.out.println("- WARNING: due minute not set; it would be set to default (" + defaultTime + ")");
             fishRequestDTO.setDueMinute(defaultTime);
         }
         FishDTO fishDTO = new FishDTO(fishRequestDTO); // 첨부파일을 fileDTO로 만듬

@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import '../../tailwind.css';
 import { BackToMain } from '../../interface/back.tsx';
 import { Link } from 'react-router-dom';
@@ -91,12 +91,16 @@ interface UploadProps {
 export const UploadPage:React.FC<UploadProps> = ( {file} )=>{
     const firstFileName = file.name;
     const fileInput = useRef<HTMLInputElement | null>(null);
-    const [ fileList, setFileList ] = useState<File[]>([]); //main에서 넘어온 파일정보는 배열에 추가 안함 -> 수정 필요
+    const [ fileList, setFileList ] = useState<File[]>([]); //main에서 넘어온 파일정보는 배열에 추가 안함 -> 초기 [file]하면 됨
     const fileCnt = useRef(1);
     const durations = [30, 60, 120, 240, 360, 720]; //분 기준 / 나중에 1시간->60분으로 변환하는 함수 만들면 더 좋을듯
     const [ active, setActive ] = useState(false);
     const dataTransfer = new DataTransfer();
   
+    useEffect(()=>{
+       console.log(file); 
+    },[])
+
     const handleButtonClick = e => {
         if (fileInput.current) {
             fileInput.current.click();

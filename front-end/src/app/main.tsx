@@ -140,7 +140,7 @@ export const MainPage:React.FC=()=>{
                     <FileUploadInput setOneFish={setOneFish} />
                     <div className='h-full flex flex-col w-1/3 max-w-[430px]'>
                         <DownButton/>
-                        { userID && <MyFishCom id=''/> }
+                        { userID && <MyFishCom id={`${userID}`}/> }
 
                     </div>
                 </div>
@@ -148,5 +148,4 @@ export const MainPage:React.FC=()=>{
                 <h1 className='text-[100px] absolute bottom-0 left-3/4 -z-10'><img src="/img/coral.png" className="w-[200px]" alt='coral'/></h1>
             </div>
     }
-    
 }

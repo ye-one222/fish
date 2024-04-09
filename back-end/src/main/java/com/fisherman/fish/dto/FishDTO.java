@@ -67,6 +67,7 @@ public class FishDTO {
         }
         fishDTO.setFileDTOList(fileDTOList);
         fishDTO.setFileCount(fishEntity.getFileCount());
+        fishDTO.setUserId(fishEntity.getFishOwner() == null ? null : fishEntity.getFishOwner().getId());
         return fishDTO;
     }
 

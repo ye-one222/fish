@@ -12,12 +12,15 @@ import com.fisherman.fish.utility.FileUtil;
 import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.time.ZoneId;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -140,14 +143,19 @@ public class FishService {
 
         // TODO: 로그인된 경우 유저 id도 저장
 
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        List<GrantedAuthority> authorities = new ArrayList<>(SecurityContextHolder.getContext().getAuthentication().getAuthorities());
+
         System.out.println("FishService: [save() called]"); // test
+        System.out.println("FishService: username - " + username + ", role - " + authorities.get(0));
+
         // 1. pin 번호 생성
         int pinNumber = generatePinNumber(fishDTO.getDueMinute());
         fishDTO.setPinNumber(pinNumber);
         System.out.println("- pinNumber " + pinNumber + " created."); // test
 
         // 2. 고유파일명 생성
-        //  - 그물 인덱스(gmoolCount)를 파일명 앞에 붙인다.
+        //  - 현재 시간을 파일명 앞에 붙인다
         // TODO: 경로는 다르지만 파일명이 같은 경우 처리
         //  - 이거 프론트 상에서 알아서 걸러지나?  filename(1) filename(2) 이런 식으로?
         //  - 되는지 안되는지 확인하고, 안되면 예외처리 필요
@@ -172,19 +180,7 @@ public class FishService {
             e.printStackTrace();
         }
         
-        // 3. 해당 그물 저장
-        // - 멤버 Entity를 받아온다 (유효한 계정인지 확인)
-        if(fishDTO.getUserId() != null){
-            // TODO : 멤버가 익명일 때, dto에 적히는 값이 null인지 ""인지 확인 필요
-            // 익명이 아닌 경우
-            Optional<MemberEntity> optionalMemberEntity = memberRepository.findById(fishDTO.getUserId());
-            System.out.println("Fetched fish uploader entity '" + optionalMemberEntity.get().getId() + "'"); // test
-            if(optionalMemberEntity.isEmpty()) {
-                // 멤버가 존재하지 않는 경우
-                System.out.println("- EXCEPTION: member '" + fishDTO.getUserId() + "' doesn't exist."); // test
-                return null;
-            }
-        }
+        // 3. 해당 fish 저장
         // - 파일 Entity를 생성한다
         List<FileEntity> fileEntities = new ArrayList<>();
         for(FileDTO fd : fileDTOS){
@@ -196,22 +192,36 @@ public class FishService {
             System.out.println("Created file entity '" + fe + "'"); // test
             fileEntities.add(fe);
         }
-        // - 그물 Entity를 생성하여 파일 Entity와 연결한다.
+        // - fish Entity를 생성하여 파일 Entity와 연결한다.
         FishEntity fishEntity = FishEntity.toFishEntity(fishDTO);
         System.out.println("Created fish entity '" + fishEntity.getFishName() + "'"); // test
         for(FileEntity fe : fileEntities){
             fe.setFishEntity(fishEntity);
             fishEntity.addFileEntity(fe);
         }
+        // - 게시자가 존재하는 경우 멤버 Entity를 fish Entity와 연결한다
+        if(fishDTO.getUserId() != null){
+            Optional<MemberEntity> optionalMemberEntity = memberRepository.findById(fishDTO.getUserId());
+            optionalMemberEntity.ifPresent( (fishOwner) -> fishEntity.setFishOwner(fishOwner) );
+            System.out.println("Fetched fish uploader entity '" + optionalMemberEntity.get().getId() + "'"); // test
+            if(optionalMemberEntity.isEmpty()) {
+                // id는 실려왔지만 멤버 엔티티가 존재하지 않는 경우
+                System.out.println("- EXCEPTION: member '" + fishDTO.getUserId() + "' doesn't exist."); // test
+                return null;
+            }
+        }
+        System.out.println(fishDTO);
+        System.out.println(fishEntity);
         // - 그물 Entity와 각 파일 Entity를 저장한다.
-        //fishCount++; // test
         FishEntity savedEntity = fishRepository.save(fishEntity);
-        System.out.println("Saved '" + fishEntity.getFishName() + "' to db"); // test
+        System.out.println("Saved fish '" + fishEntity.getFishName() + "' to db"); // test
         for(FileEntity fe : fishEntity.getFileEntityList()){
             fileRepository.save(fe);
             System.out.println("Saved file entity '" + fe.getOriginalFileName() + "' to db");
         }
+
         System.out.println("FishService: fish saved. (id: " + savedEntity.getId() + ", pinNumber: " + savedEntity.getPinNumber() + ")");
+        System.out.println();
         // 저장된 그물 dto를 반환한다.
         fishCount++;
         FishDTO tempReturnObject = FishDTO.toFishDTO(savedEntity); //temp
